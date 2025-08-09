@@ -55,7 +55,8 @@
 :root {
   --h1-line-height: 1.125;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  /* --background: oklch(1 0 0); */
+  --background: #f1f3f5;
   /* --foreground: oklch(0.145 0 0); */
   --foreground: #212529; /* ← Thay đổi này */
   --card: oklch(1 0 0);
@@ -71,7 +72,8 @@
   /* --secondary-foreground: oklch(0.205 0 0); */
   --secondary-foreground: #495057;
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  /* --muted-foreground: oklch(0.556 0 0); */
+  --muted-foreground: #868e96; /* ← Thay đổi này */
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);

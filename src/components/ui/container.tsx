@@ -8,7 +8,7 @@ const containerVariants = cva("w-full mx-auto px-4 sm:px-6 lg:px-8", {
     maxWidth: {
       xs: "max-w-sm", // ~475px
       sm: "max-w-md", // ~640px
-      md: "max-w-2xl", // ~768px
+      md: "max-w-[835px]", // ~768px
       lg: "max-w-[1234px]", // 1170px custom px-8
       xl: "max-w-[1362px]", // ~1280px
       "2xl": "max-w-[1442px]", // ~1536px
