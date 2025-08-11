@@ -4,10 +4,14 @@ import { cn } from "@/lib/utils";
 export function ButtonGradient({
   className,
   children,
+  isOutlined,
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const baseClasses =
-    "px-8 py-3 text-white font-medium transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg";
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  isOutlined?: boolean;
+}) {
+  const baseClasses = `${
+    isOutlined ? "" : "hover:scale-105"
+  } px-8 py-3 text-white font-medium transition-all duration-300 ease-in-out`;
   const baseStyle = {
     borderRadius: "360px",
     background:

@@ -1,25 +1,19 @@
 import NavbarMenu from "./navbar-menu";
 import HeaderLeft from "./header-left";
 import HeaderRight from "./header-right";
-import { Container } from "@/components/ui/container";
 
 export default function MainHeader() {
   return (
-    <header className="w-full fixed top-0 left-0 right-0 z-999">
-      <Container className="py-4">
-        <div className="rounded-[20px] min-h-[84px] bg-white flex items-center justify-between px-6 py-5">
-          {/* Logo */}
+    <header className="w-full bg-white py-4 px-8 min-h-[76px] flex items-center justify-between">
+      {/* Logo */}
+      <HeaderLeft />
 
-          <HeaderLeft />
+      {/* Navigation Menu */}
+      <NavbarMenu />
 
-          {/* Navigation Menu */}
-          <NavbarMenu />
+      {/* Action Icons */}
 
-          {/* Action Icons */}
-
-          <HeaderRight />
-        </div>
-      </Container>
+      <HeaderRight />
     </header>
   );
 }
