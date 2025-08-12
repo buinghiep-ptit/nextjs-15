@@ -1,4 +1,4 @@
-import EnhancedSocialPost from "./social-post";
+import PostWithModal from "@/components/post/post-with-modal";
 import { Container } from "@/components/ui/container";
 
 interface Comment {
@@ -382,7 +382,7 @@ export default function EnhancedSocialFeed() {
       <Container maxWidth="md">
         <div className="space-y-6">
           {postsData.map((post) => (
-            <EnhancedSocialPost
+            <PostWithModal
               key={post.id}
               author={post.author}
               timestamp={post.timestamp}
