@@ -11,7 +11,7 @@ export function ButtonGradient({
 }) {
   const baseClasses = `${
     isOutlined ? "" : "hover:scale-105"
-  } px-8 py-3 text-white font-medium transition-all duration-300 ease-in-out`;
+  } px-8 py-3 font-medium transition-all duration-300 ease-in-out`;
   const baseStyle = {
     borderRadius: "360px",
     background:
