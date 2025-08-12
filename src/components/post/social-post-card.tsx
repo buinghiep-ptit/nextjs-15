@@ -6,6 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ButtonGradientOutlined } from "@/components/ui/button-gradient-outlined";
 import { ButtonGradientOutlinedGreen } from "@/components/ui/button-gradient-outlined-green";
+import { useReactions } from "@/hooks/use-reactions";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface Comment {
   id: string;
@@ -46,7 +52,16 @@ interface SocialPostCardProps {
   onImageClick: () => void;
   variant?: "home" | "community";
   commentList?: Comment[];
+  isPremium?: boolean;
 }
+
+const EMOJI_LIST = [
+  { id: "1", src: "/icons/emoji/1.svg" },
+  { id: "7", src: "/icons/emoji/7.svg" },
+  { id: "16", src: "/icons/emoji/16.svg" },
+  { id: "19", src: "/icons/emoji/19.svg" },
+  { id: "20", src: "/icons/emoji/20.svg" },
+];
 
 export default function SocialPostCard({
   author,
@@ -60,9 +75,19 @@ export default function SocialPostCard({
   onImageClick,
   variant = "home",
   commentList = [],
+  isPremium = false,
 }: SocialPostCardProps) {
+  const {
+    reactions: postReactions,
+    toggleReaction: togglePostReaction,
+    addNewReaction: addPostReaction,
+  } = useReactions(reactions);
   return (
-    <div className="bg-white rounded-[20px] overflow-hidden py-4">
+    <div
+      className={`bg-white rounded-[20px] overflow-hidden pt-4 ${
+        isPremium ? "pb-0" : "pb-4"
+      }`}
+    >
       {/* Header */}
       <div className="flex items-start justify-between mb-3 px-4">
         <div className="flex items-start space-x-3">
@@ -109,19 +134,49 @@ export default function SocialPostCard({
           </div>
         </div>
 
-        <Button variant="ghost" className="px-1">
-          <Image src="/icons/more-icon.svg" alt="More" width={20} height={4} />
-        </Button>
+        {!isPremium && (
+          <Button variant="ghost" className="px-1">
+            <Image
+              src="/icons/more-icon.svg"
+              alt="More"
+              width={20}
+              height={4}
+            />
+          </Button>
+        )}
       </div>
 
       {/* Content */}
       <div className="mb-4 px-4">
-        <p className="text-sm">{content}</p>
+        <div
+          className="text-sm relative"
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: "3",
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {content}
+          {content.length > 150 && (
+            <button
+              onClick={onCommentClick}
+              className="text-[var(--muted-foreground)] hover:underline ml-1 inline-flex items-center"
+            >
+              ...xem thêm
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Image */}
       {image && (
-        <div className="mb-4 cursor-pointer" onClick={onImageClick}>
+        <div
+          className={`${isPremium ? "mb-0" : "mb-4"} relative ${
+            !isPremium ? "cursor-pointer" : ""
+          }`}
+          onClick={!isPremium ? onImageClick : undefined}
+        >
           <div className="relative w-full" style={{ aspectRatio: "1.75" }}>
             <Image
               src={image}
@@ -129,65 +184,108 @@ export default function SocialPostCard({
               fill
               className="object-cover hover:opacity-95 transition-opacity"
             />
+            {isPremium && (
+              <div className="absolute inset-0 backdrop-blur-md bg-[rgba(0, 0, 0, 0.50)] ">
+                <div
+                  className="flex items-center justify-center rounded-full w-9 h-9 m-4"
+                  style={{
+                    background:
+                      "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #0000B7 113.46%)",
+                  }}
+                >
+                  <Image
+                    src="/icons/crown-icon.svg"
+                    alt="Premium content"
+                    width={20}
+                    height={20}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
 
       {/* Reactions */}
-      <div className="flex items-center space-x-2 mb-0 px-4">
-        {reactions.map((reaction, index) => (
-          <ButtonGradientOutlined
-            className="rounded-full h-8.5 px-3 font-normal text-sm"
-            key={index}
-            isActive={reaction.isActive}
-          >
-            <Image
-              src={`/icons/emoji/${reaction.emoji}.svg`}
-              alt="Emoji"
-              width={20}
-              height={20}
-            />
-            <span>{reaction.count}</span>
-          </ButtonGradientOutlined>
-        ))}
-
-        <div className="flex items-center space-x-2">
-          <ButtonGradientOutlined className="rounded-full h-8.5 px-2">
-            <Image
-              src="/icons/add-emoji.svg"
-              alt="Add Emoji"
-              width={24}
-              height={24}
-            />
-          </ButtonGradientOutlined>
-
-          <ButtonGradientOutlinedGreen className="rounded-full h-7.5">
-            <Image
-              src="/icons/share-icon.png"
-              alt="Share"
-              width={18}
-              height={14}
-            />
-          </ButtonGradientOutlinedGreen>
-
-          {variant === "home" ? (
-            <Button
-              variant="ghost"
-              onClick={onCommentClick}
-              className="text-sm text-[var(--muted-foreground)] font-normal h-auto p-2 hover:bg-gray-100 rounded-full"
+      {!isPremium && (
+        <div className="flex items-center space-x-2 mb-0 px-4">
+          {postReactions.map((reaction, index) => (
+            <ButtonGradientOutlined
+              className="rounded-full h-8.5 px-3 font-normal text-sm"
+              key={index}
+              isActive={reaction.isActive}
+              onClick={() => togglePostReaction(reaction.emoji)}
             >
               <Image
-                src="/icons/comment.svg"
-                alt="Comment"
-                width={16}
-                height={14}
-                className="mr-1"
+                src={`/icons/emoji/${reaction.emoji}.svg`}
+                alt="Emoji"
+                width={20}
+                height={20}
               />
-              Bình luận
-            </Button>
-          ) : null}
+              <span>{reaction.count}</span>
+            </ButtonGradientOutlined>
+          ))}
+
+          <div className="flex items-center space-x-2">
+            <Popover>
+              <PopoverTrigger asChild>
+                <ButtonGradientOutlined className="rounded-full h-8.5 px-2">
+                  <Image
+                    src="/icons/add-emoji.svg"
+                    alt="Add Emoji"
+                    width={24}
+                    height={24}
+                  />
+                </ButtonGradientOutlined>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-2" align="start">
+                <div className="flex gap-1">
+                  {EMOJI_LIST.map((emoji) => (
+                    <button
+                      key={emoji.id}
+                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                      onClick={() => addPostReaction(emoji.id)}
+                    >
+                      <Image
+                        src={emoji.src}
+                        alt="Emoji"
+                        width={24}
+                        height={24}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            <ButtonGradientOutlinedGreen className="rounded-full h-7.5">
+              <Image
+                src="/icons/share-icon.png"
+                alt="Share"
+                width={18}
+                height={14}
+              />
+            </ButtonGradientOutlinedGreen>
+
+            {variant === "home" ? (
+              <Button
+                variant="ghost"
+                onClick={onCommentClick}
+                className="text-sm text-[var(--muted-foreground)] font-normal h-auto p-2 hover:bg-gray-100 rounded-full"
+              >
+                <Image
+                  src="/icons/comment.svg"
+                  alt="Comment"
+                  width={16}
+                  height={14}
+                  className="mr-1"
+                />
+                Bình luận
+              </Button>
+            ) : null}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Comments Preview for Community variant */}
       {variant === "community" && commentList.length > 0 && (
@@ -251,6 +349,10 @@ export default function SocialPostCard({
                             key={index}
                             className="rounded-full h-8 px-3 font-normal text-sm"
                             isActive={reaction.isActive}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onCommentClick();
+                            }}
                           >
                             <Image
                               src={`/icons/emoji/${reaction.emoji}.svg`}
@@ -261,14 +363,42 @@ export default function SocialPostCard({
                             <span>{reaction.count}</span>
                           </ButtonGradientOutlined>
                         ))}
-                        <ButtonGradientOutlined className="rounded-full h-8 px-2">
-                          <Image
-                            src="/icons/add-emoji.svg"
-                            alt="Add Emoji"
-                            width={20}
-                            height={20}
-                          />
-                        </ButtonGradientOutlined>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <ButtonGradientOutlined
+                              className="rounded-full h-8 px-2"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <Image
+                                src="/icons/add-emoji.svg"
+                                alt="Add Emoji"
+                                width={20}
+                                height={20}
+                              />
+                            </ButtonGradientOutlined>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-2" align="start">
+                            <div className="flex gap-1">
+                              {EMOJI_LIST.map((emoji) => (
+                                <button
+                                  key={emoji.id}
+                                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    onCommentClick();
+                                  }}
+                                >
+                                  <Image
+                                    src={emoji.src}
+                                    alt="Emoji"
+                                    width={24}
+                                    height={24}
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                          </PopoverContent>
+                        </Popover>
                       </div>
                     </div>
 

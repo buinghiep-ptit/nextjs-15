@@ -89,7 +89,7 @@ export default function ArtistProfile() {
         </div>
 
         <div
-          className=" w-full h-0.25 my-7 rounded-[1px]"
+          className=" w-full h-0.25 mb-10 rounded-[1px]"
           style={{
             background: "rgba(255, 255, 255, 0.20)",
           }}

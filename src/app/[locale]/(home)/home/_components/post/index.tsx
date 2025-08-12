@@ -38,6 +38,7 @@ interface PostData {
     isActive: boolean;
   }[];
   commentList?: Comment[];
+  isPremium?: boolean;
 }
 
 export default function EnhancedSocialFeed() {
@@ -54,6 +55,7 @@ export default function EnhancedSocialFeed() {
       comments: 120,
       content: `Trở thành khách mời của chương trình "Ghế không tựa", Đen Vâu - chàng rapper đình đám của cộng đồng Underground đã có những chia sẻ rất thú vị về bản thân và một vài kỷ niệm khó quên trong suốt chặng đường 10 năm làm nhạc của mình. 🔥🎤🎵`,
       image: "/images/home/feed/main-img.jpg",
+      isPremium: false,
       reactions: [
         { emoji: "0", count: 79, isActive: false },
         { emoji: "1", count: 245, isActive: false },
@@ -179,6 +181,7 @@ export default function EnhancedSocialFeed() {
       content:
         "Cảm ơn tất cả Sky đã luôn ủng hộ và yêu thương Tùng! Hẹn gặp lại trong dự án âm nhạc sắp tới nhé! 🎵✨",
       image: "/images/home/feed/main-img.jpg",
+      isPremium: true,
       reactions: [
         { emoji: "20", count: 1234, isActive: true },
         { emoji: "1", count: 567, isActive: false },
@@ -256,6 +259,7 @@ export default function EnhancedSocialFeed() {
       content:
         "Behind the scenes từ buổi chụp hình mới nhất! Cảm ơn ekip đã làm việc cực kỳ chuyên nghiệp 📸✨",
       image: "/images/home/feed/feed-img-2.jpg",
+      isPremium: false,
       reactions: [
         { emoji: "7", count: 234, isActive: false },
         { emoji: "16", count: 78, isActive: false },
@@ -289,6 +293,7 @@ export default function EnhancedSocialFeed() {
       content:
         "Thank you BLINKS for all the love and support! New music coming soon 💕🖤💖 Stay tuned! #BLACKPINK #BLINK",
       image: "/images/home/feed/feed-img-3.jpg",
+      isPremium: false,
       reactions: [
         { emoji: "20", count: 2845, isActive: true },
         { emoji: "7", count: 1567, isActive: false },
@@ -357,6 +362,7 @@ export default function EnhancedSocialFeed() {
         { emoji: "7", count: 445, isActive: true },
         { emoji: "16", count: 223, isActive: false },
       ],
+      isPremium: false,
       commentList: [
         {
           id: "comment-6",
@@ -392,6 +398,7 @@ export default function EnhancedSocialFeed() {
               image={post.image}
               reactions={post.reactions}
               commentList={post.commentList}
+              isPremium={post.isPremium}
             />
           ))}
         </div>

@@ -8,6 +8,12 @@ import { ButtonGradientOutlined } from "@/components/ui/button-gradient-outlined
 import { ButtonGradientOutlinedGreen } from "@/components/ui/button-gradient-outlined-green";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { useReactions } from "@/hooks/use-reactions";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface Comment {
   id: string;
@@ -146,6 +152,11 @@ const CommentItem = ({
   onLoadMoreReplies: (commentId: string) => void;
   newlyAddedReplies: Set<string>;
 }) => {
+  const {
+    reactions: commentReactions,
+    toggleReaction: toggleCommentReaction,
+    addNewReaction: addCommentReaction,
+  } = useReactions(comment.reactions);
   const hasReplies = comment.replies && comment.replies.length > 0;
   const visibleCount = visibleRepliesCount[comment.id] || 0;
 
@@ -229,11 +240,12 @@ const CommentItem = ({
             </Button>
 
             <div className="flex items-center space-x-2">
-              {comment.reactions.map((reaction, index) => (
+              {commentReactions.map((reaction, index) => (
                 <ButtonGradientOutlined
                   key={index}
                   className="rounded-full h-8 px-3 font-normal text-sm"
                   isActive={reaction.isActive}
+                  onClick={() => toggleCommentReaction(reaction.emoji)}
                 >
                   <Image
                     src={`/icons/emoji/${reaction.emoji}.svg`}
@@ -244,14 +256,36 @@ const CommentItem = ({
                   <span>{reaction.count}</span>
                 </ButtonGradientOutlined>
               ))}
-              <ButtonGradientOutlined className="rounded-full h-8 px-2">
-                <Image
-                  src="/icons/add-emoji.svg"
-                  alt="Add Emoji"
-                  width={20}
-                  height={20}
-                />
-              </ButtonGradientOutlined>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <ButtonGradientOutlined className="rounded-full h-8 px-2">
+                    <Image
+                      src="/icons/add-emoji.svg"
+                      alt="Add Emoji"
+                      width={20}
+                      height={20}
+                    />
+                  </ButtonGradientOutlined>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-2" align="start">
+                  <div className="flex gap-1">
+                    {EMOJI_LIST.map((emoji) => (
+                      <button
+                        key={emoji.id}
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        onClick={() => addCommentReaction(emoji.id)}
+                      >
+                        <Image
+                          src={emoji.src}
+                          alt="Emoji"
+                          width={24}
+                          height={24}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
 
@@ -305,7 +339,20 @@ const CommentItem = ({
   );
 };
 
+const EMOJI_LIST = [
+  { id: "1", src: "/icons/emoji/1.svg" },
+  { id: "7", src: "/icons/emoji/7.svg" },
+  { id: "16", src: "/icons/emoji/16.svg" },
+  { id: "19", src: "/icons/emoji/19.svg" },
+  { id: "20", src: "/icons/emoji/20.svg" },
+];
+
 export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
+  const {
+    reactions: postReactions,
+    toggleReaction: togglePostReaction,
+    addNewReaction: addPostReaction,
+  } = useReactions(post.reactions);
   const [commentsData, setCommentsData] = useState<Comment[]>(
     post.commentList || []
   );
@@ -544,11 +591,12 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
 
             {/* Reactions */}
             <div className="flex items-center space-x-2 mb-4">
-              {post.reactions.map((reaction, index) => (
+              {postReactions.map((reaction, index) => (
                 <ButtonGradientOutlined
                   className="rounded-full h-8.5 px-3 font-normal text-sm"
                   key={index}
                   isActive={reaction.isActive}
+                  onClick={() => togglePostReaction(reaction.emoji)}
                 >
                   <Image
                     src={`/icons/emoji/${reaction.emoji}.svg`}
@@ -561,14 +609,36 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
               ))}
 
               <div className="flex items-center space-x-2">
-                <ButtonGradientOutlined className="rounded-full h-8.5 px-2">
-                  <Image
-                    src="/icons/add-emoji.svg"
-                    alt="Add Emoji"
-                    width={24}
-                    height={24}
-                  />
-                </ButtonGradientOutlined>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <ButtonGradientOutlined className="rounded-full h-8.5 px-2">
+                      <Image
+                        src="/icons/add-emoji.svg"
+                        alt="Add Emoji"
+                        width={24}
+                        height={24}
+                      />
+                    </ButtonGradientOutlined>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-2" align="start">
+                    <div className="flex gap-1">
+                      {EMOJI_LIST.map((emoji) => (
+                        <button
+                          key={emoji.id}
+                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                          onClick={() => addPostReaction(emoji.id)}
+                        >
+                          <Image
+                            src={emoji.src}
+                            alt="Emoji"
+                            width={24}
+                            height={24}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
 
                 <ButtonGradientOutlinedGreen className="rounded-full h-7.5">
                   <Image

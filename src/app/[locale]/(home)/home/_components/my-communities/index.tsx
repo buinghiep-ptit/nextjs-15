@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Crown } from "lucide-react";
 import { CommunityCard } from "./community-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -75,7 +74,12 @@ export default function MyCommunities() {
                 "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #005 113.46%)",
             }}
           >
-            <Crown className="h-6 w-6 text-white" />
+            <Image
+              src="/icons/crown-icon.svg"
+              alt="Crown"
+              width={24}
+              height={24}
+            />
           </div>
           <h2 className="text-base md:text-[28px] font-bold text-gray-900">
             My communities

@@ -41,6 +41,7 @@ interface PostWithModalProps {
   }[];
   commentList?: Comment[];
   variant?: "home" | "community";
+  isPremium?: boolean;
 }
 
 export default function PostWithModal(props: PostWithModalProps) {
