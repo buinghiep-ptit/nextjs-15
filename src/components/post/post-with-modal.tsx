@@ -40,6 +40,7 @@ interface PostWithModalProps {
     isActive?: boolean;
   }[];
   commentList?: Comment[];
+  variant?: "home" | "community";
 }
 
 export default function PostWithModal(props: PostWithModalProps) {
@@ -59,6 +60,7 @@ export default function PostWithModal(props: PostWithModalProps) {
         {...props}
         onCommentClick={handleOpenModal}
         onImageClick={handleOpenModal}
+        variant={props.variant}
       />
 
       <PostModal isOpen={isModalOpen} onClose={handleCloseModal} post={props} />

@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/container";
 import { H1, H4 } from "@/components/ui/typography";
 import Image from "next/image";
 
-interface BandMember {
+interface ArtistMember {
   id: string;
   name: string;
   role: string;
@@ -12,7 +12,7 @@ interface BandMember {
   joinDate: string;
 }
 
-const bandMembers: BandMember[] = [
+const artistMembers: ArtistMember[] = [
   {
     id: "1",
     name: "TeA",
@@ -47,7 +47,7 @@ const bandMembers: BandMember[] = [
   },
 ];
 
-export default function BandProfile() {
+export default function ArtistProfile() {
   return (
     <div className="w-full mx-auto bg-[var(--accent-foreground)] text-white">
       <div className="relative w-full aspect-[8/3]">
@@ -88,6 +88,13 @@ export default function BandProfile() {
           </div>
         </div>
 
+        <div
+          className=" w-full h-0.25 my-7 rounded-[1px]"
+          style={{
+            background: "rgba(255, 255, 255, 0.20)",
+          }}
+        />
+
         <div className="pb-20">
           <div className="flex items-center gap-2 mb-8 mt-10">
             <Image
@@ -102,7 +109,7 @@ export default function BandProfile() {
           </div>
 
           <div className="flex gap-6 mb-8">
-            {bandMembers.slice(-1).map((member) => (
+            {artistMembers.slice(-1).map((member) => (
               <button key={member.id} className="group relative cursor-pointer">
                 <div className="relative w-24 h-24 rounded-full overflow-hidden transition-all duration-300 group-hover:scale-110">
                   <Image

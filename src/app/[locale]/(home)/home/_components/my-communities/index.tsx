@@ -61,7 +61,7 @@ export default function MyCommunities() {
     <Container className="md:my-16 my-6">
       {/* Outer container replicating Stack */}
       <div
-        className="rounded-2xl md:rounded-4xl border-3 md:border-6 border-white md:py-14 py-6"
+        className="relative rounded-2xl md:rounded-4xl border-3 md:border-6 border-white md:py-14 py-6"
         style={{
           background: "rgba(255, 255, 255, 0.30)",
         }}
@@ -81,6 +81,14 @@ export default function MyCommunities() {
             My communities
           </h2>
         </div>
+
+        <Image
+          src="/images/home/my-communities/gif-my-coms.svg"
+          alt="My Communities"
+          width={120}
+          height={90}
+          className="w-30 h-23 absolute top-0 right-0 -translate-x-1/4 translate-y-1/2 rotate-[22.5deg]"
+        />
 
         {/* Communities Slider */}
         <div className="relative flex items-center justify-center md:px-14 px-3">
