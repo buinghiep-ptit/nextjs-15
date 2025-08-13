@@ -1,3 +1,4 @@
+"use client";
 import PostWithModal from "@/components/post/post-with-modal";
 import { Container } from "@/components/ui/container";
 
@@ -375,6 +376,7 @@ export default function EnhancedSocialFeed() {
         { emoji: "7", count: 445, isActive: true },
         { emoji: "16", count: 223, isActive: false },
       ],
+      images: [],
       isPremium: false,
       commentList: [
         {
@@ -412,6 +414,8 @@ export default function EnhancedSocialFeed() {
               reactions={post.reactions}
               commentList={post.commentList}
               isPremium={post.isPremium}
+              onEdit={() => console.log("Edit post", post.id)}
+              onDelete={() => console.log("Delete post", post.id)}
             />
           ))}
         </div>

@@ -29,15 +29,15 @@ const ImagePreviewCreate = React.memo(
 
     return (
       <div className="w-full">
-        {/* Hiển thị list ngang như Figma design với ảnh size 103x103px */}
+        {/* Hiển thị tối đa 5 ảnh fit width, không scroll */}
         <div
-          className="flex flex-row gap-0.5 items-start justify-center overflow-x-auto cursor-pointer"
+          className="flex flex-row gap-0.5 items-start justify-center cursor-pointer"
           onClick={onImageClick}
         >
-          {selectedImages.slice(0, 4).map((image, index) => (
+          {selectedImages.slice(0, 5).map((image, index) => (
             <div
               key={index}
-              className="relative shrink-0 w-[103px] h-[103px] rounded-lg overflow-hidden group"
+              className="relative flex-1 max-w-[103px] aspect-square rounded-lg overflow-hidden group"
             >
               <Image
                 src={URL.createObjectURL(image)}
@@ -45,35 +45,8 @@ const ImagePreviewCreate = React.memo(
                 fill
                 className="object-cover"
               />
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeImage(index);
-                }}
-                className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                  <path
-                    d="M9 3L3 9M3 3L9 9"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            </div>
-          ))}
-
-          {/* Ảnh thứ 5 với overlay +X nếu có nhiều hơn 5 ảnh */}
-          {selectedImages.length >= 5 && (
-            <div className="relative shrink-0 w-[103px] h-[103px] rounded-lg overflow-hidden group">
-              <Image
-                src={URL.createObjectURL(selectedImages[4])}
-                alt="Preview 5"
-                fill
-                className="object-cover"
-              />
-              {selectedImages.length > 5 && (
+              {/* Overlay +X cho ảnh cuối nếu có nhiều hơn 5 ảnh */}
+              {index === 4 && selectedImages.length > 5 && (
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                   <span className="text-white text-[15px] font-medium leading-[20px]">
                     +{selectedImages.length - 5}
@@ -83,7 +56,7 @@ const ImagePreviewCreate = React.memo(
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  removeImage(4);
+                  removeImage(index);
                 }}
                 className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
               >
@@ -97,7 +70,7 @@ const ImagePreviewCreate = React.memo(
                 </svg>
               </button>
             </div>
-          )}
+          ))}
         </div>
       </div>
     );
@@ -398,7 +371,11 @@ export default function PostCreateModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[600px] lg:w-2/5 bg-white rounded-3xl border-0 p-0 overflow-hidden max-h-[calc(100vh-80px)] flex flex-col">
+      <DialogContent
+        className="max-w-[600px] lg:w-2/5 bg-white rounded-3xl border-0 p-0 overflow-hidden max-h-[calc(100vh-80px)] flex flex-col"
+        overlayClassName="bg-[rgba(14,15,17,0.50)] backdrop-blur-[8px]"
+        showCloseButton={false}
+      >
         <DialogTitle className="sr-only">Tạo bài viết</DialogTitle>
 
         {/* Header - Fixed */}

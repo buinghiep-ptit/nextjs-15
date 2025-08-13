@@ -42,6 +42,8 @@ interface PostWithModalProps {
   commentList?: Comment[];
   variant?: "home" | "community";
   isPremium?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export default function PostWithModal(props: PostWithModalProps) {
@@ -62,6 +64,8 @@ export default function PostWithModal(props: PostWithModalProps) {
         onCommentClick={handleOpenModal}
         onImageClick={handleOpenModal}
         variant={props.variant}
+        onEdit={props.onEdit}
+        onDelete={props.onDelete}
       />
 
       <PostModal isOpen={isModalOpen} onClose={handleCloseModal} post={props} />

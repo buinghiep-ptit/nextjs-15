@@ -13,6 +13,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import ImageDisplayView from "./image-display-view";
+import PostMenuPopover from "./post-menu-popover";
+import EditPostModal from "./edit-post-modal";
+import DeleteConfirmationModal from "./delete-confirmation-modal";
 
 interface Comment {
   id: string;
@@ -54,6 +57,8 @@ interface SocialPostCardProps {
   variant?: "home" | "community";
   commentList?: Comment[];
   isPremium?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 const EMOJI_LIST = [
@@ -64,54 +69,59 @@ const EMOJI_LIST = [
   { id: "20", src: "/icons/emoji/20.svg" },
 ];
 
-const ContentWithReadMore = ({
-  content,
-  onReadMore,
-}: {
-  content: string;
-  onReadMore: () => void;
-}) => {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [showReadMore, setShowReadMore] = useState(false);
+const ContentWithReadMore = React.memo(
+  ({ content, onReadMore }: { content: string; onReadMore: () => void }) => {
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [showReadMore, setShowReadMore] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
 
-  useEffect(() => {
-    if (contentRef.current) {
-      setShowReadMore(
-        contentRef.current.scrollHeight > contentRef.current.clientHeight
-      );
-    }
-  }, [content]);
+    useEffect(() => {
+      if (!isChecked && contentRef.current) {
+        const element = contentRef.current;
+        const hasOverflow = element.scrollHeight > element.clientHeight;
+        setShowReadMore(hasOverflow);
+        setIsChecked(true);
+      }
+    }, [isChecked]);
 
-  return (
-    <div className="text-sm relative">
-      <div
-        ref={contentRef}
-        className="text-sm"
-        style={{
-          display: "-webkit-box",
-          WebkitLineClamp: "3",
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-          lineHeight: "20px",
-          wordBreak: "break-word",
-          textOverflow: "ellipsis",
-        }}
-      >
-        {content}
-      </div>
-      {showReadMore && (
-        <div className="text-right mt-1">
-          <button
-            onClick={onReadMore}
-            className="text-[var(--muted-foreground)] hover:underline text-sm"
-          >
-            ...Xem thêm
-          </button>
+    // Reset check when content changes
+    useEffect(() => {
+      setIsChecked(false);
+    }, [content]);
+
+    return (
+      <div className="text-sm relative">
+        <div
+          ref={contentRef}
+          className="text-sm"
+          style={{
+            display: "-webkit-box",
+            WebkitLineClamp: "3",
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            lineHeight: "20px",
+            wordBreak: "break-word",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {content}
         </div>
-      )}
-    </div>
-  );
-};
+        {showReadMore && (
+          <div className="text-right mt-1">
+            <button
+              onClick={onReadMore}
+              className="text-[var(--muted-foreground)] hover:underline text-sm"
+            >
+              ...Xem thêm
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+ContentWithReadMore.displayName = "ContentWithReadMore";
 
 export default function SocialPostCard({
   author,
@@ -126,12 +136,37 @@ export default function SocialPostCard({
   variant = "home",
   commentList = [],
   isPremium = false,
+  onEdit,
+  onDelete,
 }: SocialPostCardProps) {
   const {
     reactions: postReactions,
     toggleReaction: togglePostReaction,
     addNewReaction: addPostReaction,
   } = useReactions(reactions);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleEdit = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleEditSubmit = (newContent: string, newImages: File[]) => {
+    onEdit?.();
+    // TODO: Handle actual edit logic
+    console.log("Edit post:", newContent, newImages);
+  };
+
+  const handleDeleteConfirm = () => {
+    onDelete?.();
+    // TODO: Handle actual delete logic
+    console.log("Delete post");
+  };
   return (
     <div
       className={`bg-white rounded-[20px] overflow-hidden pt-4 ${
@@ -185,14 +220,16 @@ export default function SocialPostCard({
         </div>
 
         {!isPremium && (
-          <Button variant="ghost" className="px-1">
-            <Image
-              src="/icons/more-icon.svg"
-              alt="More"
-              width={20}
-              height={4}
-            />
-          </Button>
+          <PostMenuPopover onEdit={handleEdit} onDelete={handleDelete}>
+            <Button variant="ghost" className="px-1">
+              <Image
+                src="/icons/more-icon.svg"
+                alt="More"
+                width={20}
+                height={4}
+              />
+            </Button>
+          </PostMenuPopover>
         )}
       </div>
 
@@ -452,6 +489,22 @@ export default function SocialPostCard({
           </div>
         </>
       )}
+
+      {/* Edit Post Modal */}
+      <EditPostModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSubmit={handleEditSubmit}
+        initialContent={content}
+        initialImages={images}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 }

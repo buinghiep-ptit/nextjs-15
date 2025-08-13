@@ -371,6 +371,7 @@ export default function ListPostMain() {
         { emoji: "7", count: 445, isActive: true },
         { emoji: "16", count: 223, isActive: false },
       ],
+      images: [],
       commentList: [
         {
           id: "comment-6",
@@ -453,6 +454,8 @@ export default function ListPostMain() {
                 reactions={post.reactions}
                 commentList={post.commentList}
                 variant="community"
+                onEdit={() => console.log("Edit post", post.id)}
+                onDelete={() => console.log("Delete post", post.id)}
               />
             ))}
           </div>

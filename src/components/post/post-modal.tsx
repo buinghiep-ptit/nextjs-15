@@ -501,6 +501,7 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
       <DialogContent
         showCloseButton={false}
         className="max-w-2xl lg:w-1/2 h-screen py-4 px-0 border-0 bg-white overflow-hidden rounded-none"
+        overlayClassName="bg-[rgba(14,15,17,0.50)] backdrop-blur-[8px]"
       >
         <DialogTitle className="sr-only">Chi tiết bài viết</DialogTitle>
 

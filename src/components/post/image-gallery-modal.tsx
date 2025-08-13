@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface ImageGalleryModalProps {
   isOpen: boolean;
@@ -60,8 +60,13 @@ export default function ImageGalleryModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogOverlay className="bg-[rgba(14,15,17,0.50)] backdrop-blur-[8px]" />
-      <DialogContent className="max-w-[600px] lg:w-2/5 bg-white rounded-3xl border-0 p-0 overflow-hidden">
+      <DialogContent
+        className="max-w-[600px] lg:w-2/5 bg-white rounded-3xl border-0 p-0 overflow-hidden"
+        overlayClassName="bg-[rgba(14,15,17,0.50)] backdrop-blur-[8px]"
+        showCloseButton={false}
+      >
+        <DialogTitle className="sr-only">Tải ảnh</DialogTitle>
+
         {/* Header */}
         <div className="pt-8 pb-0 px-0">
           <div className="px-6 py-0 w-full">
@@ -71,12 +76,15 @@ export default function ImageGalleryModal({
           </div>
         </div>
 
-        {/* Image Container - Grid với max 5 items per row */}
+        {/* Image Container - Grid với max 5 items per row, fit width */}
         <div className="px-[20.5px] py-8 w-full">
-          <div className="grid grid-cols-5 gap-2 justify-items-center">
+          <div className="grid grid-cols-5 gap-2">
             {images.map((image, index) => (
-              <div key={index} className="relative group">
-                <div className="w-[100px] h-[100px] rounded-lg overflow-hidden bg-gray-200">
+              <div
+                key={index}
+                className="relative group rounded-lg overflow-hidden"
+              >
+                <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-200">
                   <Image
                     src={URL.createObjectURL(image)}
                     alt={`Image ${index + 1}`}
@@ -105,7 +113,7 @@ export default function ImageGalleryModal({
             {/* Add Image Button */}
             <button
               onClick={triggerFileInput}
-              className="w-[100px] h-[100px] border border-[#FF2FC1] border-solid rounded-lg flex items-center justify-center p-8"
+              className="w-full aspect-square border border-[#FF2FC1] border-solid rounded-lg flex items-center justify-center"
             >
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
                 <path
@@ -149,7 +157,7 @@ export default function ImageGalleryModal({
             {/* Vertical Separator */}
             <div className="w-px bg-[#DEE2E6] self-stretch" />
 
-            {/* Tải lên Button */}
+            {/* Tiếp tục Button */}
             <button
               onClick={handleUpload}
               className="flex-1 bg-white flex items-center justify-center px-6 py-4"
@@ -158,7 +166,7 @@ export default function ImageGalleryModal({
                 className="text-[15px] font-bold leading-[24px] bg-gradient-to-r from-[#FF2FC1] to-[#744DF1] bg-clip-text"
                 style={{ WebkitTextFillColor: "transparent" }}
               >
-                Tải lên
+                Tiếp tục
               </span>
             </button>
           </div>
