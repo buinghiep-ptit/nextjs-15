@@ -33,7 +33,7 @@ interface PostWithModalProps {
   views: number;
   comments: number;
   content: string;
-  image?: string;
+  images?: string[];
   reactions: {
     emoji: string;
     count: number;

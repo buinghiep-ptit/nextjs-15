@@ -44,7 +44,7 @@ export interface EnhancedPost {
   views: number;
   comments: number; // total count
   content: string;
-  image?: string;
+  images?: string[];
   reactions: Reaction[];
 
   // Legacy reply support (single reply)

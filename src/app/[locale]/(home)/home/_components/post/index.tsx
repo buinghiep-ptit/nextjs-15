@@ -31,7 +31,7 @@ interface PostData {
   views: number;
   comments: number;
   content: string;
-  image?: string;
+  images?: string[];
   reactions: {
     emoji: string;
     count: number;
@@ -54,7 +54,7 @@ export default function EnhancedSocialFeed() {
       views: 96,
       comments: 120,
       content: `Trở thành khách mời của chương trình "Ghế không tựa", Đen Vâu - chàng rapper đình đám của cộng đồng Underground đã có những chia sẻ rất thú vị về bản thân và một vài kỷ niệm khó quên trong suốt chặng đường 10 năm làm nhạc của mình. Trở thành khách mời của chương trình "Ghế không tựa", Đen Vâu - chàng rapper đình đám của cộng đồng Underground 🔥🎤🎵`,
-      image: "/images/home/feed/main-img.jpg",
+      images: ["/images/home/feed/main-img.jpg"],
       isPremium: false,
       reactions: [
         { emoji: "0", count: 79, isActive: false },
@@ -180,7 +180,13 @@ export default function EnhancedSocialFeed() {
       comments: 89,
       content:
         "Cảm ơn tất cả Sky đã luôn ủng hộ và yêu thương Tùng! Hẹn gặp lại trong dự án âm nhạc sắp tới nhé! 🎵✨ Cảm ơn tất cả Sky đã luôn ủng hộ và yêu thương Tùng! Hẹn gặp lại trong dự án âm nhạc sắp tới nhé! 🎵✨ Cảm ơn tất cả Sky đã luôn ủng hộ và yêu thương Tùng! Hẹn gặp lại trong dựCảm ơn tất cả Sky đã luôn ủng hộ và yêu thương Tùng! Hẹn gặp lại trong dự",
-      image: "/images/home/feed/main-img.jpg",
+      images: [
+        "/images/home/feed/main-img.jpg",
+        "/images/home/feed/feed-img-2.jpg",
+        "/images/home/feed/feed-img-3.jpg",
+        "/images/home/trending/artist-bg.png",
+        "/images/home/banner-slider-1.png",
+      ],
       isPremium: true,
       reactions: [
         { emoji: "20", count: 1234, isActive: true },
@@ -258,7 +264,10 @@ export default function EnhancedSocialFeed() {
       comments: 45,
       content:
         "Behind the scenes từ buổi chụp hình mới nhất! Cảm ơn ekip đã làm việc cực kỳ chuyên nghiệp 📸✨",
-      image: "/images/home/feed/feed-img-2.jpg",
+      images: [
+        "/images/home/feed/feed-img-2.jpg",
+        "/images/home/feed/main-img.jpg",
+      ],
       isPremium: false,
       reactions: [
         { emoji: "7", count: 234, isActive: false },
@@ -292,7 +301,11 @@ export default function EnhancedSocialFeed() {
       comments: 234,
       content:
         "Thank you BLINKS for all the love and support! New music coming soon 💕🖤💖 Stay tuned! #BLACKPINK #BLINK",
-      image: "/images/home/feed/feed-img-3.jpg",
+      images: [
+        "/images/home/feed/feed-img-3.jpg",
+        "/images/home/feed/feed-img-2.jpg",
+        "/images/home/feed/main-img.jpg",
+      ],
       isPremium: false,
       reactions: [
         { emoji: "20", count: 2845, isActive: true },
@@ -395,7 +408,7 @@ export default function EnhancedSocialFeed() {
               views={post.views}
               comments={post.comments}
               content={post.content}
-              image={post.image}
+              images={post.images}
               reactions={post.reactions}
               commentList={post.commentList}
               isPremium={post.isPremium}

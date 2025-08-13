@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import ImageDisplayView from "./image-display-view";
 
 interface Comment {
   id: string;
@@ -42,7 +43,7 @@ interface SocialPostCardProps {
   views: number;
   comments: number;
   content: string;
-  image?: string;
+  images?: string[];
   reactions: {
     emoji: string;
     count: number;
@@ -118,7 +119,7 @@ export default function SocialPostCard({
   views,
   comments,
   content,
-  image,
+  images,
   reactions,
   onCommentClick,
   onImageClick,
@@ -200,40 +201,31 @@ export default function SocialPostCard({
         <ContentWithReadMore content={content} onReadMore={onCommentClick} />
       </div>
 
-      {/* Image */}
-      {image && (
-        <div
-          className={`${isPremium ? "mb-0" : "mb-4"} relative ${
-            !isPremium ? "cursor-pointer" : ""
-          }`}
-          onClick={!isPremium ? onImageClick : undefined}
-        >
-          <div className="relative w-full" style={{ aspectRatio: "1.75" }}>
-            <Image
-              src={image}
-              alt="Post image"
-              fill
-              className="object-cover hover:opacity-95 transition-opacity"
-            />
-            {isPremium && (
-              <div className="absolute inset-0 backdrop-blur-md bg-[rgba(0, 0, 0, 0.50)] ">
-                <div
-                  className="flex items-center justify-center rounded-full w-9 h-9 m-4"
-                  style={{
-                    background:
-                      "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #0000B7 113.46%)",
-                  }}
-                >
-                  <Image
-                    src="/icons/crown-icon.svg"
-                    alt="Premium content"
-                    width={20}
-                    height={20}
-                  />
-                </div>
+      {/* Images */}
+      {images && images.length > 0 && (
+        <div className={`${isPremium ? "mb-0" : "mb-4"} relative`}>
+          <ImageDisplayView
+            images={images}
+            onImageClick={!isPremium ? onImageClick : undefined}
+          />
+          {isPremium && (
+            <div className="absolute inset-0 backdrop-blur-md bg-[rgba(0, 0, 0, 0.50)] rounded-lg">
+              <div
+                className="flex items-center justify-center rounded-full w-9 h-9 m-4"
+                style={{
+                  background:
+                    "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #0000B7 113.46%)",
+                }}
+              >
+                <Image
+                  src="/icons/crown-icon.svg"
+                  alt="Premium content"
+                  width={20}
+                  height={20}
+                />
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
 

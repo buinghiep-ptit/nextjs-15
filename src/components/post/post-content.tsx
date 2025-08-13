@@ -1,18 +1,19 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
+import ImageDisplayView from "./image-display-view";
 
 interface PostContentProps {
   content: string;
-  image?: string;
+  images?: string[];
   imageAspectRatio?: number;
   onImageClick?: () => void;
 }
 
 export function PostContent({
   content,
-  image,
-  imageAspectRatio = 1.75,
+  images,
+  // imageAspectRatio = 1.75,
   onImageClick,
 }: PostContentProps) {
   return (
@@ -22,21 +23,10 @@ export function PostContent({
         <p className="text-sm leading-relaxed">{content}</p>
       </div>
 
-      {/* Image */}
-      {image && (
+      {/* Images */}
+      {images && images.length > 0 && (
         <div className="mb-4">
-          <div
-            className="relative w-full cursor-pointer"
-            style={{ aspectRatio: imageAspectRatio.toString() }}
-            onClick={onImageClick}
-          >
-            <Image
-              src={image}
-              alt="Post image"
-              fill
-              className="object-cover hover:opacity-95 transition-opacity"
-            />
-          </div>
+          <ImageDisplayView images={images} onImageClick={onImageClick} />
         </div>
       )}
     </>

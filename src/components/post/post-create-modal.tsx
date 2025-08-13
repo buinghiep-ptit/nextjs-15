@@ -13,7 +13,86 @@ interface PostCreateModalProps {
   onSubmit?: (content: string, images: File[]) => void;
 }
 
-// Component riêng cho Image Preview để tránh re-render khi content thay đổi
+// Component cho Image Preview trong create/edit mode - Hiển thị dạng list ngang như Figma
+const ImagePreviewCreate = React.memo(
+  ({
+    selectedImages,
+    removeImage,
+  }: {
+    selectedImages: File[];
+    removeImage: (index: number) => void;
+  }) => {
+    if (selectedImages.length === 0) return null;
+
+    return (
+      <div className="w-full">
+        {/* Hiển thị list ngang như Figma design với ảnh size 103x103px */}
+        <div className="flex flex-row gap-0.5 items-start justify-center overflow-x-auto">
+          {selectedImages.slice(0, 4).map((image, index) => (
+            <div
+              key={index}
+              className="relative shrink-0 w-[103px] h-[103px] rounded-lg overflow-hidden group"
+            >
+              <Image
+                src={URL.createObjectURL(image)}
+                alt={`Preview ${index + 1}`}
+                fill
+                className="object-cover"
+              />
+              <button
+                onClick={() => removeImage(index)}
+                className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M9 3L3 9M3 3L9 9"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          ))}
+
+          {/* Ảnh thứ 5 với overlay +X nếu có nhiều hơn 5 ảnh */}
+          {selectedImages.length >= 5 && (
+            <div className="relative shrink-0 w-[103px] h-[103px] rounded-lg overflow-hidden group">
+              <Image
+                src={URL.createObjectURL(selectedImages[4])}
+                alt="Preview 5"
+                fill
+                className="object-cover"
+              />
+              {selectedImages.length > 5 && (
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                  <span className="text-white text-[15px] font-medium leading-[20px]">
+                    +{selectedImages.length - 5}
+                  </span>
+                </div>
+              )}
+              <button
+                onClick={() => removeImage(4)}
+                className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+              >
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M9 3L3 9M3 3L9 9"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+);
+
+// Component cho Image Preview trong view mode - Giữ nguyên layout phức tạp
 const ImagePreview = React.memo(
   ({
     selectedImages,
@@ -237,6 +316,7 @@ const ImagePreview = React.memo(
   }
 );
 
+ImagePreviewCreate.displayName = "ImagePreviewCreate";
 ImagePreview.displayName = "ImagePreview";
 
 export default function PostCreateModal({
@@ -327,7 +407,7 @@ export default function PostCreateModal({
             </div>
 
             {/* Image Preview */}
-            <ImagePreview
+            <ImagePreviewCreate
               selectedImages={selectedImages}
               removeImage={removeImage}
             />

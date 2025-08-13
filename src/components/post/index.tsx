@@ -13,7 +13,7 @@ interface SocialPostProps {
   views: number;
   comments: number;
   content: string;
-  image?: string;
+  images?: string[];
   reactions: {
     emoji: string;
     count: number;
@@ -51,7 +51,7 @@ export default function RefactoredSocialPost({
   views,
   comments,
   content,
-  image,
+  images,
   reactions,
   reply,
   onMoreClick,
@@ -77,7 +77,7 @@ export default function RefactoredSocialPost({
       {/* Content Section */}
       <PostContent
         content={content}
-        image={image}
+        images={images}
         imageAspectRatio={1.75}
         onImageClick={onImageClick}
       />

@@ -14,6 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import ImageDisplayView from "./image-display-view";
 
 interface Comment {
   id: string;
@@ -47,7 +48,7 @@ interface PostModalProps {
     views: number;
     comments: number;
     content: string;
-    image?: string;
+    images?: string[];
     reactions: {
       emoji: string;
       count: number;
@@ -572,20 +573,10 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
               <p className="text-sm">{post.content}</p>
             </div>
 
-            {/* Image */}
-            {post.image && (
+            {/* Images */}
+            {post.images && post.images.length > 0 && (
               <div className="mb-4">
-                <div
-                  className="relative w-full"
-                  style={{ aspectRatio: "1.75" }}
-                >
-                  <Image
-                    src={post.image}
-                    alt="Post image"
-                    fill
-                    className="object-cover rounded-lg"
-                  />
-                </div>
+                <ImageDisplayView images={post.images} />
               </div>
             )}
 

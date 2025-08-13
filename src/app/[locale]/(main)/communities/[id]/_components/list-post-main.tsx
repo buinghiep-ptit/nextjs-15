@@ -33,7 +33,7 @@ interface PostData {
   views: number;
   comments: number;
   content: string;
-  image?: string;
+  images?: string[];
   reactions: {
     emoji: string;
     count: number;
@@ -55,7 +55,7 @@ export default function ListPostMain() {
       views: 96,
       comments: 120,
       content: `Trở thành khách mời của chương trình "Ghế không tựa", Đen Vâu - chàng rapper đình đám của cộng đồng Underground đã có những chia sẻ rất thú vị về bản thân và một vài kỷ niệm khó quên trong suốt chặng đường 10 năm làm nhạc của mình. 🔥🎤🎵`,
-      image: "/images/home/feed/main-img.jpg",
+      images: ["/images/home/feed/main-img.jpg"],
       reactions: [
         { emoji: "0", count: 79, isActive: false },
         { emoji: "1", count: 245, isActive: false },
@@ -180,7 +180,10 @@ export default function ListPostMain() {
       comments: 89,
       content:
         "Cảm ơn tất cả Sky đã luôn ủng hộ và yêu thương Tùng! Hẹn gặp lại trong dự án âm nhạc sắp tới nhé! 🎵✨",
-      image: "/images/home/feed/main-img.jpg",
+      images: [
+        "/images/home/feed/main-img.jpg",
+        "/images/home/feed/feed-img-2.jpg",
+      ],
       reactions: [
         { emoji: "20", count: 1234, isActive: true },
         { emoji: "1", count: 567, isActive: false },
@@ -257,7 +260,11 @@ export default function ListPostMain() {
       comments: 45,
       content:
         "Behind the scenes từ buổi chụp hình mới nhất! Cảm ơn ekip đã làm việc cực kỳ chuyên nghiệp 📸✨",
-      image: "/images/home/feed/feed-img-2.jpg",
+      images: [
+        "/images/home/feed/feed-img-2.jpg",
+        "/images/home/feed/feed-img-3.jpg",
+        "/images/home/feed/main-img.jpg",
+      ],
       reactions: [
         { emoji: "7", count: 234, isActive: false },
         { emoji: "16", count: 78, isActive: false },
@@ -290,7 +297,12 @@ export default function ListPostMain() {
       comments: 234,
       content:
         "Thank you BLINKS for all the love and support! New music coming soon 💕🖤💖 Stay tuned! #BLACKPINK #BLINK",
-      image: "/images/home/feed/feed-img-3.jpg",
+      images: [
+        "/images/home/feed/feed-img-3.jpg",
+        "/images/home/feed/main-img.jpg",
+        "/images/home/feed/feed-img-2.jpg",
+        "/images/home/trending/artist-bg.png",
+      ],
       reactions: [
         { emoji: "20", count: 2845, isActive: true },
         { emoji: "7", count: 1567, isActive: false },
@@ -377,6 +389,33 @@ export default function ListPostMain() {
         },
       ],
     },
+    {
+      id: "post-5",
+      author: {
+        name: "Demo User",
+        avatar: "/images/home/trending/artist-avatar.png",
+        isVerified: false,
+      },
+      timestamp: "4/8 14:30",
+      views: 321,
+      comments: 67,
+      content:
+        "Demo post với 6 ảnh để test layout 5+ ảnh với overlay +X 📸✨🎯",
+      images: [
+        "/images/home/feed/main-img.jpg",
+        "/images/home/feed/feed-img-2.jpg",
+        "/images/home/feed/feed-img-3.jpg",
+        "/images/home/trending/artist-bg.png",
+        "/images/home/banner-slider-1.png",
+        "/images/home/trending/trending-bg.png",
+      ],
+      reactions: [
+        { emoji: "0", count: 45, isActive: false },
+        { emoji: "1", count: 23, isActive: true },
+        { emoji: "7", count: 67, isActive: false },
+      ],
+      commentList: [],
+    },
   ];
   const handleAddComment = (comment: string) => {
     console.log(comment);
@@ -410,7 +449,7 @@ export default function ListPostMain() {
                 views={post.views}
                 comments={post.comments}
                 content={post.content}
-                image={post.image}
+                images={post.images}
                 reactions={post.reactions}
                 commentList={post.commentList}
                 variant="community"
