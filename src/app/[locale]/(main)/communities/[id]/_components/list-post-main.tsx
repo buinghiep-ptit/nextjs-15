@@ -390,7 +390,7 @@ export default function ListPostMain() {
       ],
     },
     {
-      id: "post-5",
+      id: "post-6",
       author: {
         name: "Demo User",
         avatar: "/images/home/trending/artist-avatar.png",

@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ButtonGradient } from "../ui/button-gradient";
 import { ButtonGradientOutlined } from "../ui/button-gradient-outlined";
 import { ButtonGradientOutlinedBlue } from "../ui/button-gradient-outlined-blue";
+import ImageGalleryModal from "./image-gallery-modal";
 
 interface PostCreateModalProps {
   isOpen: boolean;
@@ -18,16 +19,21 @@ const ImagePreviewCreate = React.memo(
   ({
     selectedImages,
     removeImage,
+    onImageClick,
   }: {
     selectedImages: File[];
     removeImage: (index: number) => void;
+    onImageClick?: () => void;
   }) => {
     if (selectedImages.length === 0) return null;
 
     return (
       <div className="w-full">
         {/* Hiển thị list ngang như Figma design với ảnh size 103x103px */}
-        <div className="flex flex-row gap-0.5 items-start justify-center overflow-x-auto">
+        <div
+          className="flex flex-row gap-0.5 items-start justify-center overflow-x-auto cursor-pointer"
+          onClick={onImageClick}
+        >
           {selectedImages.slice(0, 4).map((image, index) => (
             <div
               key={index}
@@ -40,7 +46,10 @@ const ImagePreviewCreate = React.memo(
                 className="object-cover"
               />
               <button
-                onClick={() => removeImage(index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeImage(index);
+                }}
                 className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
@@ -72,7 +81,10 @@ const ImagePreviewCreate = React.memo(
                 </div>
               )}
               <button
-                onClick={() => removeImage(4)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeImage(4);
+                }}
                 className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
               >
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
@@ -326,6 +338,7 @@ export default function PostCreateModal({
 }: PostCreateModalProps) {
   const [content, setContent] = useState("");
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = () => {
@@ -371,6 +384,18 @@ export default function PostCreateModal({
     [adjustTextareaHeight]
   );
 
+  const handleOpenGalleryModal = useCallback(() => {
+    setIsGalleryModalOpen(true);
+  }, []);
+
+  const handleCloseGalleryModal = useCallback(() => {
+    setIsGalleryModalOpen(false);
+  }, []);
+
+  const handleGalleryImagesUpdate = useCallback((images: File[]) => {
+    setSelectedImages(images);
+  }, []);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[600px] lg:w-2/5 bg-white rounded-3xl border-0 p-0 overflow-hidden max-h-[calc(100vh-80px)] flex flex-col">
@@ -410,6 +435,7 @@ export default function PostCreateModal({
             <ImagePreviewCreate
               selectedImages={selectedImages}
               removeImage={removeImage}
+              onImageClick={handleOpenGalleryModal}
             />
           </div>
         </div>
@@ -468,6 +494,14 @@ export default function PostCreateModal({
           </div>
         </div>
       </DialogContent>
+
+      {/* Image Gallery Modal */}
+      <ImageGalleryModal
+        isOpen={isGalleryModalOpen}
+        onClose={handleCloseGalleryModal}
+        initialImages={selectedImages}
+        onImagesUpdate={handleGalleryImagesUpdate}
+      />
     </Dialog>
   );
 }
