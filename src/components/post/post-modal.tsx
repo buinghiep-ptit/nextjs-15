@@ -202,8 +202,8 @@ const CommentItem = ({
           <AvatarFallback>{comment.author.name[0]}</AvatarFallback>
         </Avatar>
 
-        <div className="flex-1 space-y-2">
-          <div className="px-4 py-3 bg-[var(--background)] rounded-2xl">
+        <div className="flex-1 space-y-2 flex flex-col items-start">
+          <div className="px-4 py-3 bg-[var(--background)] w-auto rounded-2xl">
             <div className="flex items-center space-x-2 mb-1">
               <h4 className="font-bold text-[15px]">{comment.author.name}</h4>
               {comment.author.isVerified && (

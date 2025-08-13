@@ -68,12 +68,24 @@ export default function ImageGalleryModal({
         <DialogTitle className="sr-only">Tải ảnh</DialogTitle>
 
         {/* Header */}
-        <div className="pt-8 pb-0 px-0">
+        <div className="pt-8 pb-0 px-0 relative">
           <div className="px-6 py-0 w-full">
             <h2 className="text-[24px] font-bold text-[#212529] text-center w-full leading-[32px]">
               Tải ảnh
             </h2>
           </div>
+
+          <button
+            onClick={onClose}
+            className="absolute cursor-pointer top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 z-10"
+          >
+            <Image
+              src="/icons/close-circle.svg"
+              alt="Close"
+              width={32}
+              height={32}
+            />
+          </button>
         </div>
 
         {/* Image Container - Grid với max 5 items per row, fit width */}
@@ -160,12 +172,15 @@ export default function ImageGalleryModal({
             {/* Tiếp tục Button */}
             <button
               onClick={handleUpload}
-              className="flex-1 bg-white flex items-center justify-center px-6 py-4"
+              className="flex-1 flex cursor-pointer items-center justify-center px-6 py-4 "
+              style={{
+                background:
+                  "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #005 113.46%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+              }}
             >
-              <span
-                className="text-[15px] font-bold leading-[24px] bg-gradient-to-r from-[#FF2FC1] to-[#744DF1] bg-clip-text"
-                style={{ WebkitTextFillColor: "transparent" }}
-              >
+              <span className="text-[15px] font-bold leading-[24px] text-transparent">
                 Tiếp tục
               </span>
             </button>

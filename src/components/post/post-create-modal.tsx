@@ -31,7 +31,7 @@ const ImagePreviewCreate = React.memo(
       <div className="w-full">
         {/* Hiển thị tối đa 5 ảnh fit width, không scroll */}
         <div
-          className="flex flex-row gap-0.5 items-start justify-center cursor-pointer"
+          className="flex flex-row gap-0.5 items-center cursor-pointer"
           onClick={onImageClick}
         >
           {selectedImages.slice(0, 5).map((image, index) => (
@@ -379,7 +379,7 @@ export default function PostCreateModal({
         <DialogTitle className="sr-only">Tạo bài viết</DialogTitle>
 
         {/* Header - Fixed */}
-        <div className="flex-shrink-0 p-6 pt-8 pb-4">
+        <div className="flex-shrink-0 p-6 pt-8 pb-4 relative">
           <div className="flex flex-col gap-6 items-center">
             <div className="flex flex-col gap-3 items-start w-full relative">
               <h2 className="text-[24px] font-bold leading-[32px] text-[#212529] text-center w-full">
@@ -387,6 +387,18 @@ export default function PostCreateModal({
               </h2>
             </div>
           </div>
+
+          <button
+            onClick={onClose}
+            className="absolute cursor-pointer top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 z-10"
+          >
+            <Image
+              src="/icons/close-circle.svg"
+              alt="Close"
+              width={32}
+              height={32}
+            />
+          </button>
         </div>
 
         {/* Content - Scrollable */}

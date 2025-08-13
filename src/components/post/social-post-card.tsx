@@ -369,7 +369,7 @@ export default function SocialPostCard({
                     <AvatarFallback>{comment.author.name[0]}</AvatarFallback>
                   </Avatar>
 
-                  <div className="flex-1">
+                  <div className="flex-1 flex flex-col items-start">
                     <div className="px-4 py-3 bg-[var(--background)] rounded-2xl">
                       <div className="flex items-center space-x-2 mb-1">
                         <h4 className="font-bold text-[15px]">
