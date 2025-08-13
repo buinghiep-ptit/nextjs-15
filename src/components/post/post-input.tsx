@@ -4,23 +4,29 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import PostCreateModal from "./post-create-modal";
 
 interface PostInputProps {
-  onSubmit: (content: string) => void;
+  onSubmit?: (content: string) => void;
+  onCreatePost?: (content: string, images: File[]) => void;
   placeholder?: string;
   replyTo?: string;
   autoFocus?: boolean;
   isReply?: boolean;
+  showCreateModal?: boolean;
 }
 
 export default function PostInput({
   onSubmit,
+  onCreatePost,
   placeholder = "Chia sẻ bài viết trên Fanverse...",
   replyTo,
   autoFocus = false,
   isReply = false,
+  showCreateModal = false,
 }: PostInputProps) {
   const [comment, setComment] = useState(replyTo ? `@${replyTo} ` : "");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSubmit = () => {
     if (comment.trim()) {
@@ -28,7 +34,7 @@ export default function PostInput({
       if (replyTo && cleanContent.startsWith(`@${replyTo}`)) {
         cleanContent = cleanContent.replace(`@${replyTo}`, "").trim();
       }
-      onSubmit(cleanContent);
+      onSubmit?.(cleanContent);
       setComment(replyTo ? `@${replyTo} ` : "");
     }
   };
@@ -38,6 +44,16 @@ export default function PostInput({
       e.preventDefault();
       handleSubmit();
     }
+  };
+
+  const handleInputFocus = () => {
+    if (showCreateModal && !isReply) {
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCreatePost = (content: string, images: File[]) => {
+    onCreatePost?.(content, images);
   };
 
   return (
@@ -66,6 +82,7 @@ export default function PostInput({
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             onKeyPress={handleKeyPress}
+            onFocus={handleInputFocus}
             placeholder={placeholder}
             className="flex-1 border-0 text-[15px] font-normal leading-[20px] focus-visible:ring-0 p-0 h-full bg-transparent placeholder:text-[var(--muted-foreground)]"
             autoFocus={autoFocus}
@@ -83,6 +100,13 @@ export default function PostInput({
           </div>
         </div>
       </div>
+
+      {/* Create Post Modal */}
+      <PostCreateModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreatePost}
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -62,6 +62,55 @@ const EMOJI_LIST = [
   { id: "19", src: "/icons/emoji/19.svg" },
   { id: "20", src: "/icons/emoji/20.svg" },
 ];
+
+const ContentWithReadMore = ({
+  content,
+  onReadMore,
+}: {
+  content: string;
+  onReadMore: () => void;
+}) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [showReadMore, setShowReadMore] = useState(false);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setShowReadMore(
+        contentRef.current.scrollHeight > contentRef.current.clientHeight
+      );
+    }
+  }, [content]);
+
+  return (
+    <div className="text-sm relative">
+      <div
+        ref={contentRef}
+        className="text-sm"
+        style={{
+          display: "-webkit-box",
+          WebkitLineClamp: "3",
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          lineHeight: "20px",
+          wordBreak: "break-word",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {content}
+      </div>
+      {showReadMore && (
+        <div className="text-right mt-1">
+          <button
+            onClick={onReadMore}
+            className="text-[var(--muted-foreground)] hover:underline text-sm"
+          >
+            ...Xem thêm
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function SocialPostCard({
   author,
@@ -148,25 +197,7 @@ export default function SocialPostCard({
 
       {/* Content */}
       <div className="mb-4 px-4">
-        <div
-          className="text-sm relative"
-          style={{
-            display: "-webkit-box",
-            WebkitLineClamp: "3",
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-          }}
-        >
-          {content}
-          {content.length > 150 && (
-            <button
-              onClick={onCommentClick}
-              className="text-[var(--muted-foreground)] hover:underline ml-1 inline-flex items-center"
-            >
-              ...xem thêm
-            </button>
-          )}
-        </div>
+        <ContentWithReadMore content={content} onReadMore={onCommentClick} />
       </div>
 
       {/* Image */}

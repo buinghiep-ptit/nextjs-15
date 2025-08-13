@@ -394,7 +394,12 @@ export default function ListPostMain() {
             <div className="mb-6">
               <PostInput
                 onSubmit={handleAddComment}
+                onCreatePost={(content, images) => {
+                  console.log("Create post:", content, images);
+                  // TODO: Implement create post logic
+                }}
                 placeholder="Chia sẻ bài viết trên Fanverse..."
+                showCreateModal={true}
               />
             </div>
             {postsData.map((post) => (
