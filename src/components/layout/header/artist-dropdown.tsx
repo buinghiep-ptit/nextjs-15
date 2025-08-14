@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/popover";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useArtist } from "@/providers/artist-provider";
+import { useRouter, usePathname } from "next/navigation";
 
 interface Artist {
   id: string;
@@ -17,16 +19,11 @@ interface Artist {
   followerCount: string;
 }
 
-interface ArtistDropdownProps {
-  currentArtist: Artist;
-  onArtistChange: (artist: Artist) => void;
-}
-
-export default function ArtistDropdown({
-  currentArtist,
-  onArtistChange,
-}: ArtistDropdownProps) {
+export default function ArtistDropdown() {
+  const { currentArtist, setCurrentArtist, generateArtistSlug } = useArtist();
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Mock data for artists
   const artists: Artist[] = [
@@ -75,8 +72,27 @@ export default function ArtistDropdown({
   ];
 
   const handleArtistSelect = (artist: Artist) => {
-    onArtistChange(artist);
+    setCurrentArtist(artist);
     setIsOpen(false);
+
+    // Update URL with new artist slug
+    const newArtistSlug = generateArtistSlug(artist);
+
+    // Get current locale from pathname
+    const pathSegments = pathname.split("/");
+    const locale = pathSegments[1];
+
+    // Check current page type and update URL accordingly
+    if (pathname.includes("/artistpedia/")) {
+      router.push(`/${locale}/artistpedia/${newArtistSlug}`);
+    } else if (pathname.includes("/community/")) {
+      router.push(`/${locale}/community/${newArtistSlug}`);
+    } else if (pathname.includes("/artists/")) {
+      router.push(`/${locale}/artists/${newArtistSlug}`);
+    } else if (pathname.includes("/media/")) {
+      router.push(`/${locale}/media/${newArtistSlug}`);
+    }
+    // If on other pages (home, profile, etc.), don't change URL
   };
 
   return (

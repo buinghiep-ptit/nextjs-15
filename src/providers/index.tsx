@@ -2,6 +2,7 @@ import QueryProvider from "./query-provider";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { ThemeProvider } from "./theme-provider";
 import AuthProvider from "./auth-provider";
+import { ArtistProvider } from "./artist-provider";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,7 +14,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           enableSystem
           disableTransitionOnChange
         >
-          <QueryProvider>{children}</QueryProvider>
+          <ArtistProvider>
+            <QueryProvider>{children}</QueryProvider>
+          </ArtistProvider>
         </ThemeProvider>
       </AuthProvider>
     </ErrorBoundary>
