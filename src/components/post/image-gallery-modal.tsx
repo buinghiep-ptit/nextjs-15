@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { ButtonGradientOutlined } from "../ui/button-gradient-outlined";
 
 interface ImageGalleryModalProps {
   isOpen: boolean;
@@ -106,13 +107,15 @@ export default function ImageGalleryModal({
                 </div>
                 {/* Remove Button - chỉ hiện khi hover */}
                 <button
-                  onClick={() => removeImage(index)}
-                  className="absolute top-1 right-1 w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeImage(index);
+                  }}
+                  className="absolute cursor-pointer top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="12" fill="#868E96" />
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                     <path
-                      d="M8 8L16 16M16 8L8 16"
+                      d="M9 3L3 9M3 3L9 9"
                       stroke="white"
                       strokeWidth="1.5"
                       strokeLinecap="round"
@@ -123,19 +126,18 @@ export default function ImageGalleryModal({
             ))}
 
             {/* Add Image Button */}
-            <button
+            <ButtonGradientOutlined
               onClick={triggerFileInput}
-              className="w-full aspect-square border border-[#FF2FC1] border-solid rounded-lg flex items-center justify-center"
+              className="w-full h-full aspect-square flex items-center justify-center"
+              isCircle={false}
             >
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                <path
-                  d="M18 7.5V28.5M7.5 18H28.5"
-                  stroke="#FF2FC1"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
+              <Image
+                src="/icons/add-icon.svg"
+                alt="Add Emoji"
+                width={36}
+                height={36}
+              />
+            </ButtonGradientOutlined>
           </div>
 
           {/* Hidden File Input */}
@@ -159,9 +161,9 @@ export default function ImageGalleryModal({
             {/* Quay lại Button */}
             <button
               onClick={handleBack}
-              className="flex-1 bg-white flex items-center justify-center px-6 py-4"
+              className="flex-1 cursor-pointer flex items-center justify-center px-6 py-4"
             >
-              <span className="text-[15px] font-bold text-[#212529] leading-[24px]">
+              <span className="text-[15px] font-bold leading-[24px]">
                 Quay lại
               </span>
             </button>

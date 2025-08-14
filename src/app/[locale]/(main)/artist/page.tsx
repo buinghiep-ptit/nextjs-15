@@ -1,5 +1,10 @@
 import React from "react";
+import ArtistSlider from "./_components/artist-slider";
 
 export default function ArtistPage() {
-  return <div>ArtistPage</div>;
+  return (
+    <div className="">
+      <ArtistSlider />
+    </div>
+  );
 }

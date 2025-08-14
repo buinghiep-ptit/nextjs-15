@@ -1,5 +1,5 @@
 import { HStack, Stack } from "@/components/ui/layout";
-import { ArtistCard } from "./artist-card";
+import { ArtistCard } from "@/components/ui/artist-card";
 import Image from "next/image";
 import { GradientText } from "@/components/ui/text-gradient";
 import { H1 } from "@/components/ui/typography";
@@ -105,6 +105,7 @@ export default function ArtistGrid() {
               artistName={artist.name}
               coverImageSrc={artist.cover}
               avatarSrc={artist.avatar}
+              variant="grid"
             />
           ))}
         </div>

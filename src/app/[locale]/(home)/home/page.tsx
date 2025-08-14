@@ -1,7 +1,7 @@
 import React from "react";
 import Intro from "./_components/intro";
 import BannerSlider from "./_components/banner/banner-slider";
-import ArtistGrid from "./_components/trending/artist-grid";
+import ArtistGrid from "./_components/fan-community/artist-grid";
 import MyCommunities from "./_components/my-communities";
 import SocialFeedExample from "./_components/post";
 

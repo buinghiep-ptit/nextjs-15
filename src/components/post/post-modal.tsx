@@ -268,12 +268,16 @@ const CommentItem = ({
                     />
                   </ButtonGradientOutlined>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-2" align="start">
-                  <div className="flex gap-1">
+                <PopoverContent
+                  className="w-auto p-0 bg-primary border-0 rounded-2xl"
+                  align="center"
+                  sideOffset={8}
+                >
+                  <div className="flex gap-1 p-2">
                     {EMOJI_LIST.map((emoji) => (
                       <button
                         key={emoji.id}
-                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="p-2 cursor-pointer hover:bg-gray-600 rounded-lg transition-colors"
                         onClick={() => addCommentReaction(emoji.id)}
                       >
                         <Image
@@ -612,12 +616,16 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
                       />
                     </ButtonGradientOutlined>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-2" align="start">
-                    <div className="flex gap-1">
+                  <PopoverContent
+                    className="w-auto p-0 bg-primary border-0 rounded-2xl"
+                    align="center"
+                    sideOffset={8}
+                  >
+                    <div className="flex gap-1 p-2">
                       {EMOJI_LIST.map((emoji) => (
                         <button
                           key={emoji.id}
-                          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                          className="p-2 cursor-pointer hover:bg-gray-600 rounded-lg transition-colors"
                           onClick={() => addPostReaction(emoji.id)}
                         >
                           <Image

@@ -67,7 +67,7 @@ const ImagePreviewEdit = React.memo(
                   e.stopPropagation();
                   removeImage(index);
                 }}
-                className="absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                className="absolute cursor-pointer top-1 right-1 w-5 h-5 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
               >
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
                   <path
@@ -213,7 +213,7 @@ export default function EditPostModal({
         <div className="flex-shrink-0 p-6 pt-8 pb-4 relative">
           <div className="flex flex-col gap-6 items-center">
             <div className="flex flex-col gap-3 items-start w-full relative">
-              <h2 className="text-[24px] font-bold leading-[32px] text-[#212529] text-center w-full">
+              <h2 className="text-2xl font-bold leading-[32px] text-center w-full">
                 Chỉnh sửa bài viết
               </h2>
             </div>
@@ -261,7 +261,7 @@ export default function EditPostModal({
         </div>
 
         {/* Action Container - Fixed at Bottom */}
-        <div className="flex-shrink-0 bg-white border-t border-gray-100 p-6">
+        <div className="flex-shrink-0 p-6">
           <div className="flex flex-row items-center justify-between">
             {/* Media Buttons */}
             <div className="flex flex-row gap-3 items-center">

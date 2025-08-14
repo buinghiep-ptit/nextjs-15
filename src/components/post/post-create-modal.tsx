@@ -382,7 +382,7 @@ export default function PostCreateModal({
         <div className="flex-shrink-0 p-6 pt-8 pb-4 relative">
           <div className="flex flex-col gap-6 items-center">
             <div className="flex flex-col gap-3 items-start w-full relative">
-              <h2 className="text-[24px] font-bold leading-[32px] text-[#212529] text-center w-full">
+              <h2 className="text-2xl font-bold leading-[32px] text-center w-full">
                 Tạo bài viết
               </h2>
             </div>
@@ -430,7 +430,7 @@ export default function PostCreateModal({
         </div>
 
         {/* Action Container - Fixed at Bottom */}
-        <div className="flex-shrink-0 bg-white border-t border-gray-100 p-6">
+        <div className="flex-shrink-0 p-6">
           <div className="flex flex-row items-center justify-between">
             {/* Media Buttons */}
             <div className="flex flex-row gap-3 items-center">

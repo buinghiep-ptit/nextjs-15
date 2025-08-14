@@ -69,6 +69,77 @@ const EMOJI_LIST = [
   { id: "20", src: "/icons/emoji/20.svg" },
 ];
 
+const CommentReactions = ({
+  reactions,
+}: {
+  reactions: { emoji: string; count: number; isActive?: boolean }[];
+}) => {
+  const {
+    reactions: commentReactions,
+    toggleReaction: toggleCommentReaction,
+    addNewReaction: addCommentReaction,
+  } = useReactions(reactions);
+
+  return (
+    <div className="flex items-center space-x-2">
+      {commentReactions.map((reaction, index) => (
+        <ButtonGradientOutlined
+          key={index}
+          className="rounded-full h-8 px-3 font-normal text-sm"
+          isActive={reaction.isActive}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleCommentReaction(reaction.emoji);
+          }}
+        >
+          <Image
+            src={`/icons/emoji/${reaction.emoji}.svg`}
+            alt="Emoji"
+            width={16}
+            height={16}
+          />
+          <span>{reaction.count}</span>
+        </ButtonGradientOutlined>
+      ))}
+      <Popover>
+        <PopoverTrigger asChild>
+          <ButtonGradientOutlined
+            className="rounded-full h-8 px-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src="/icons/add-emoji.svg"
+              alt="Add Emoji"
+              width={20}
+              height={20}
+            />
+          </ButtonGradientOutlined>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-auto p-0 bg-primary border-0 rounded-2xl"
+          align="center"
+          sideOffset={8}
+        >
+          <div className="flex gap-1 p-2">
+            {EMOJI_LIST.map((emoji) => (
+              <button
+                key={emoji.id}
+                className="p-2 cursor-pointer hover:bg-gray-600 rounded-lg transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addCommentReaction(emoji.id);
+                }}
+              >
+                <Image src={emoji.src} alt="Emoji" width={24} height={24} />
+              </button>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
+
 const ContentWithReadMore = React.memo(
   ({ content, onReadMore }: { content: string; onReadMore: () => void }) => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -298,12 +369,16 @@ export default function SocialPostCard({
                   />
                 </ButtonGradientOutlined>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-2" align="start">
-                <div className="flex gap-1">
+              <PopoverContent
+                className="w-auto p-0 bg-primary border-0 rounded-2xl"
+                align="center"
+                sideOffset={8}
+              >
+                <div className="flex gap-1 p-2">
                   {EMOJI_LIST.map((emoji) => (
                     <button
                       key={emoji.id}
-                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-2 cursor-pointer hover:bg-gray-600 rounded-lg transition-colors"
                       onClick={() => addPostReaction(emoji.id)}
                     >
                       <Image
@@ -355,11 +430,7 @@ export default function SocialPostCard({
           {/* Level 0 Comments Preview */}
           <div className="px-4 py-4 space-y-4">
             {commentList.slice(0, 2).map((comment) => (
-              <div
-                key={comment.id}
-                onClick={onCommentClick}
-                className="cursor-pointer"
-              >
+              <div key={comment.id}>
                 <div className="flex items-start space-x-3">
                   <Avatar className="w-12 h-12">
                     <AvatarImage
@@ -403,70 +474,17 @@ export default function SocialPostCard({
                         Trả lời
                       </Button>
 
-                      <div className="flex items-center space-x-2">
-                        {comment.reactions.map((reaction, index) => (
-                          <ButtonGradientOutlined
-                            key={index}
-                            className="rounded-full h-8 px-3 font-normal text-sm"
-                            isActive={reaction.isActive}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onCommentClick();
-                            }}
-                          >
-                            <Image
-                              src={`/icons/emoji/${reaction.emoji}.svg`}
-                              alt="Emoji"
-                              width={16}
-                              height={16}
-                            />
-                            <span>{reaction.count}</span>
-                          </ButtonGradientOutlined>
-                        ))}
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <ButtonGradientOutlined
-                              className="rounded-full h-8 px-2"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Image
-                                src="/icons/add-emoji.svg"
-                                alt="Add Emoji"
-                                width={20}
-                                height={20}
-                              />
-                            </ButtonGradientOutlined>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-2" align="start">
-                            <div className="flex gap-1">
-                              {EMOJI_LIST.map((emoji) => (
-                                <button
-                                  key={emoji.id}
-                                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    onCommentClick();
-                                  }}
-                                >
-                                  <Image
-                                    src={emoji.src}
-                                    alt="Emoji"
-                                    width={24}
-                                    height={24}
-                                  />
-                                </button>
-                              ))}
-                            </div>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
+                      <CommentReactions reactions={comment.reactions} />
                     </div>
 
                     {/* Show replies count if any */}
                     {comment.replies && comment.replies.length > 0 && (
                       <div className="flex flex-row gap-1 items-center justify-start mt-2">
                         <div className="w-6 h-0.25 bg-[var(--muted-foreground)] rounded-full" />
-                        <span className="text-[15px] text-[var(--muted-foreground)] font-normal">
+                        <span
+                          className="text-[15px] text-[var(--muted-foreground)] font-normal cursor-pointer"
+                          onClick={onCommentClick}
+                        >
                           Xem thêm {comment.replies.length} bình luận
                         </span>
                       </div>
