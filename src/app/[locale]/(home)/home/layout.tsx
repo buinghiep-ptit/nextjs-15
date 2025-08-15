@@ -8,7 +8,7 @@ export default function HomeLayout({
 }) {
   return (
     <>
-      <Header />
+      <Header showArtistDropdown={false} />
       {children}
       <Footer />
     </>
