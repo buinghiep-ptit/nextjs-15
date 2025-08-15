@@ -1,7 +1,11 @@
+"use client";
+
 import { ButtonGradient } from "@/components/ui/button-gradient";
 import { Container } from "@/components/ui/container";
 import { H1, H4 } from "@/components/ui/typography";
 import Image from "next/image";
+import JoinCommunityModal from "./_components/join-community-modal";
+import { useState } from "react";
 
 interface ArtistMember {
   id: string;
@@ -48,6 +52,9 @@ const artistMembers: ArtistMember[] = [
 ];
 
 export default function ArtistProfile() {
+  const [isJoinCommunityModalOpen, setIsJoinCommunityModalOpen] =
+    useState(false);
+
   return (
     <div className="w-full mx-auto bg-[var(--accent-foreground)] text-white">
       <div className="relative w-full aspect-[8/3]">
@@ -74,6 +81,7 @@ export default function ArtistProfile() {
             }}
           >
             <ButtonGradient
+              onClick={() => setIsJoinCommunityModalOpen(true)}
               className="h-16 font-bold text-lg flex items-center gap-2"
               isOutlined
             >
@@ -145,6 +153,16 @@ export default function ArtistProfile() {
           </div>
         </div>
       </Container>
+
+      <JoinCommunityModal
+        isOpen={isJoinCommunityModalOpen}
+        onClose={() => setIsJoinCommunityModalOpen(false)}
+        onSave={() => {}}
+        initialData={{
+          nickname: "",
+          avatar: "/images/info/avatar.jpg",
+        }}
+      />
     </div>
   );
 }
