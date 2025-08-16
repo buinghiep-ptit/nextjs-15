@@ -135,7 +135,7 @@ export default function ArtistDropdown() {
 
   // Show loading state
   if (isLoading) {
-    return <Skeleton className="bg-gray-200 w-25 h-7" />;
+    return <Skeleton className="bg-gray-200 w-20 sm:w-24 md:w-25 h-6 sm:h-7" />;
   }
 
   // Don't render if no current artist
@@ -148,7 +148,7 @@ export default function ArtistDropdown() {
       <PopoverTrigger asChild>
         <button className="flex items-center gap-2 cursor-pointer group">
           <h1
-            className="text-[24px] font-bold leading-[28px] text-[#212529] transition-colors group-hover:opacity-80"
+            className="text-[18px] sm:text-[20px] md:text-[24px] font-bold leading-tight md:leading-[28px] text-[#212529] transition-colors group-hover:opacity-80"
             style={{ fontFamily: "Phudu" }}
           >
             {currentArtist.name}
@@ -165,7 +165,7 @@ export default function ArtistDropdown() {
       </PopoverTrigger>
 
       <PopoverContent
-        className="w-80 p-0 bg-white border border-gray-200 rounded-2xl shadow-xl"
+        className="w-[260px] sm:w-[280px] md:w-80 p-0 bg-white border border-gray-200 rounded-2xl shadow-xl"
         align="start"
         sideOffset={8}
       >
@@ -185,7 +185,7 @@ export default function ArtistDropdown() {
                     : ""
                 }`}
               >
-                <Avatar className="w-12 h-12">
+                <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
                   <AvatarImage
                     src={artist.avatar}
                     alt={artist.name}
@@ -225,7 +225,7 @@ export default function ArtistDropdown() {
           {/* Add new artist option */}
           <div className="mt-4 pt-4 border-t border-gray-100">
             <button className="w-full flex items-center gap-3 p-3 rounded-xl transition-colors hover:bg-gray-50 text-[#495057]">
-              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-full flex items-center justify-center">
                 <Image src="/icons/plus.svg" alt="Add" width={20} height={20} />
               </div>
               <span className="font-medium text-sm">

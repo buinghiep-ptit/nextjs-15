@@ -19,14 +19,20 @@ export default function ProfileInfo({
   isVerified,
 }: ProfileInfoProps) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 sm:gap-4">
       {/* Name and Verification */}
       <div className="flex items-center gap-2">
-        <h1 className="text-[32px] font-bold text-white leading-[40px]">
+        <h1 className="text-xl sm:text-2xl md:text-[32px] font-bold text-white leading-tight sm:leading-[32px] md:leading-[40px]">
           {name}
         </h1>
         {isVerified && (
-          <Image src="/icons/tick.svg" alt="Verified" width={24} height={24} />
+          <Image
+            src="/icons/tick.svg"
+            alt="Verified"
+            width={20}
+            height={20}
+            className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6"
+          />
         )}
       </div>
 
@@ -36,10 +42,11 @@ export default function ProfileInfo({
           <Image
             src="/icons/bod-icon.svg"
             alt="Birthday"
-            width={24}
-            height={24}
+            width={20}
+            height={20}
+            className="w-5 h-5 sm:w-6 sm:h-6"
           />
-          <span className="text-[#bfadf9] text-[14px] font-semibold leading-[20px]">
+          <span className="text-[#bfadf9] text-xs sm:text-sm font-semibold leading-tight sm:leading-[18px] md:leading-[20px]">
             {birthday}
           </span>
         </div>
@@ -47,7 +54,7 @@ export default function ProfileInfo({
 
       {/* Description */}
       {description && (
-        <div className="text-[#f1edfe] text-[14px] font-normal leading-[20px] whitespace-pre-line">
+        <div className="text-[#f1edfe] text-xs sm:text-sm font-normal leading-tight sm:leading-[18px] md:leading-[20px] whitespace-pre-line">
           {description}
         </div>
       )}

@@ -81,11 +81,11 @@ const CommentReactions = ({
   } = useReactions(reactions);
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-1 sm:space-x-2">
       {commentReactions.map((reaction, index) => (
         <ButtonGradientOutlined
           key={index}
-          className="rounded-full h-8 px-3 font-normal text-sm"
+          className="rounded-full h-7 sm:h-8 px-2 sm:px-3 font-normal text-xs sm:text-sm"
           isActive={reaction.isActive}
           onClick={(e) => {
             e.stopPropagation();
@@ -104,14 +104,15 @@ const CommentReactions = ({
       <Popover>
         <PopoverTrigger asChild>
           <ButtonGradientOutlined
-            className="rounded-full h-8 px-2"
+            className="rounded-full h-7 sm:h-8 px-1 sm:px-2"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
               src="/icons/add-emoji.svg"
               alt="Add Emoji"
-              width={20}
-              height={20}
+              width={18}
+              height={18}
+              className="w-4 h-4 sm:w-5 sm:h-5"
             />
           </ButtonGradientOutlined>
         </PopoverTrigger>
@@ -130,7 +131,13 @@ const CommentReactions = ({
                   addCommentReaction(emoji.id);
                 }}
               >
-                <Image src={emoji.src} alt="Emoji" width={24} height={24} />
+                <Image
+                  src={emoji.src}
+                  alt="Emoji"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 sm:w-6 sm:h-6"
+                />
               </button>
             ))}
           </div>
@@ -161,10 +168,10 @@ const ContentWithReadMore = React.memo(
     }, [content]);
 
     return (
-      <div className="text-sm relative">
+      <div className="text-xs sm:text-sm relative">
         <div
           ref={contentRef}
-          className="text-sm"
+          className="text-xs sm:text-sm"
           style={{
             display: "-webkit-box",
             WebkitLineClamp: "3",
@@ -181,7 +188,7 @@ const ContentWithReadMore = React.memo(
           <div className="text-right mt-1">
             <button
               onClick={onReadMore}
-              className="text-[var(--muted-foreground)] hover:underline text-sm"
+              className="text-[var(--muted-foreground)] hover:underline text-xs sm:text-sm"
             >
               ...Xem thêm
             </button>
@@ -240,32 +247,35 @@ export default function SocialPostCard({
   };
   return (
     <div
-      className={`bg-white rounded-[20px] overflow-hidden pt-4 ${
-        isPremium ? "pb-0" : "pb-4"
+      className={`bg-white rounded-[16px] sm:rounded-[20px] overflow-hidden pt-3 sm:pt-4 ${
+        isPremium ? "pb-0" : "pb-3 sm:pb-4"
       }`}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-3 px-4">
-        <div className="flex items-start space-x-3">
-          <Avatar className="w-12 h-12">
+      <div className="flex items-start justify-between mb-2 sm:mb-3 px-3 sm:px-4">
+        <div className="flex items-start space-x-2 sm:space-x-3">
+          <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
             <AvatarImage src={author.avatar} alt={author.name} />
             <AvatarFallback>{author.name[0]}</AvatarFallback>
           </Avatar>
 
           <div>
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="font-bold text-[15px]">{author.name}</h3>
+              <h3 className="font-bold text-[13px] sm:text-[15px]">
+                {author.name}
+              </h3>
               {author.isVerified && (
                 <Image
                   src="/icons/tick.svg"
                   alt="Verified"
-                  width={16}
-                  height={16}
+                  width={14}
+                  height={14}
+                  className="w-3 h-3 sm:w-4 sm:h-4"
                 />
               )}
             </div>
 
-            <div className="flex items-center space-x-2.5 text-sm text-[var(--muted-foreground)]">
+            <div className="flex items-center space-x-1.5 sm:space-x-2.5 text-xs sm:text-sm text-[var(--muted-foreground)]">
               <span>{timestamp}</span>
               <span>•</span>
               <div className="flex items-center space-x-1">
@@ -305,13 +315,13 @@ export default function SocialPostCard({
       </div>
 
       {/* Content */}
-      <div className="mb-4 px-4">
+      <div className="mb-3 sm:mb-4 px-3 sm:px-4">
         <ContentWithReadMore content={content} onReadMore={onCommentClick} />
       </div>
 
       {/* Images */}
       {images && images.length > 0 && (
-        <div className={`${isPremium ? "mb-0" : "mb-4"} relative`}>
+        <div className={`${isPremium ? "mb-0" : "mb-3 sm:mb-4"} relative`}>
           <ImageDisplayView
             images={images}
             onImageClick={!isPremium ? onImageClick : undefined}
@@ -339,10 +349,10 @@ export default function SocialPostCard({
 
       {/* Reactions */}
       {!isPremium && (
-        <div className="flex items-center space-x-2 mb-0 px-4">
+        <div className="flex items-center space-x-1 sm:space-x-2 mb-0 px-3 sm:px-4">
           {postReactions.map((reaction, index) => (
             <ButtonGradientOutlined
-              className="rounded-full h-8.5 px-3 font-normal text-sm"
+              className="rounded-full h-7 sm:h-8 px-2 sm:px-3 font-normal text-xs sm:text-sm"
               key={index}
               isActive={reaction.isActive}
               onClick={() => togglePostReaction(reaction.emoji)}
@@ -350,22 +360,24 @@ export default function SocialPostCard({
               <Image
                 src={`/icons/emoji/${reaction.emoji}.svg`}
                 alt="Emoji"
-                width={20}
-                height={20}
+                width={16}
+                height={16}
+                className="w-4 h-4 sm:w-5 sm:h-5"
               />
               <span>{reaction.count}</span>
             </ButtonGradientOutlined>
           ))}
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <Popover>
               <PopoverTrigger asChild>
-                <ButtonGradientOutlined className="rounded-full h-8.5 px-2">
+                <ButtonGradientOutlined className="rounded-full h-7 sm:h-8 px-1 sm:px-2">
                   <Image
                     src="/icons/add-emoji.svg"
                     alt="Add Emoji"
-                    width={24}
-                    height={24}
+                    width={18}
+                    height={18}
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                   />
                 </ButtonGradientOutlined>
               </PopoverTrigger>
@@ -384,8 +396,9 @@ export default function SocialPostCard({
                       <Image
                         src={emoji.src}
                         alt="Emoji"
-                        width={24}
-                        height={24}
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 sm:w-6 sm:h-6"
                       />
                     </button>
                   ))}
@@ -393,12 +406,13 @@ export default function SocialPostCard({
               </PopoverContent>
             </Popover>
 
-            <ButtonGradientOutlinedGreen className="rounded-full h-7.5">
+            <ButtonGradientOutlinedGreen className="rounded-full h-7 sm:h-8">
               <Image
                 src="/icons/share-icon.png"
                 alt="Share"
-                width={18}
-                height={14}
+                width={16}
+                height={12}
+                className="w-4 h-3 sm:w-[18px] sm:h-[14px]"
               />
             </ButtonGradientOutlinedGreen>
 
@@ -406,14 +420,14 @@ export default function SocialPostCard({
               <Button
                 variant="ghost"
                 onClick={onCommentClick}
-                className="text-sm text-[var(--muted-foreground)] font-normal h-auto p-2 hover:bg-gray-100 rounded-full"
+                className="text-xs sm:text-sm text-[var(--muted-foreground)] font-normal h-auto p-1.5 sm:p-2 hover:bg-gray-100 rounded-full"
               >
                 <Image
                   src="/icons/comment.svg"
                   alt="Comment"
-                  width={16}
-                  height={14}
-                  className="mr-1"
+                  width={14}
+                  height={12}
+                  className="w-3.5 h-3 sm:w-4 sm:h-3.5 mr-0.5 sm:mr-1"
                 />
                 Bình luận
               </Button>

@@ -21,14 +21,15 @@ export default function ProfileMoreMenu({
     <Popover>
       <PopoverTrigger asChild>
         <button
-          className="w-8 cursor-pointer h-8 flex items-center justify-center rounded-full hover:bg-white/30 transition-colors"
+          className="w-7 h-7 sm:w-8 sm:h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-white/30 transition-colors"
           aria-label="More options"
         >
           <Image
             src="/icons/more-circle.svg"
             alt="More"
-            width={32}
-            height={32}
+            width={28}
+            height={28}
+            className="w-6 h-6 sm:w-7 sm:h-7"
           />
         </button>
       </PopoverTrigger>
@@ -50,7 +51,7 @@ export default function ProfileMoreMenu({
                 width={20}
                 height={20}
               />
-              <span className="text-sm font-normal text-primary-foreground leading-[20px]">
+              <span className="text-xs sm:text-sm font-normal text-primary-foreground leading-tight sm:leading-[20px]">
                 Báo cáo
               </span>
             </button>
@@ -70,7 +71,7 @@ export default function ProfileMoreMenu({
               width={24}
               height={24}
             />
-            <span className="text-sm font-normal text-primary-foreground leading-[20px]">
+            <span className="text-xs sm:text-sm font-normal text-primary-foreground leading-tight sm:leading-[20px]">
               Chặn người dùng
             </span>
           </button>

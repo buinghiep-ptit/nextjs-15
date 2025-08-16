@@ -20,7 +20,7 @@ export function ButtonGradientOutlinedGreen({
       <Button
         {...props}
         variant="ghost"
-        className={cn(className)}
+        className={cn("text-xs sm:text-sm", className)}
         style={baseStyle}
       >
         {children}

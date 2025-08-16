@@ -43,7 +43,7 @@ export default function NavbarMenu() {
 
   return (
     <div>
-      <nav className="hidden md:flex space-x-8">
+      <nav className="hidden md:flex space-x-4 lg:space-x-6 xl:space-x-8">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(`/${locale}${item.basePath}`);
 
@@ -51,7 +51,7 @@ export default function NavbarMenu() {
             <button
               key={item.name}
               onClick={() => handleNavClick(item)}
-              className={`relative cursor-pointer text-[15px] font-semibold pb-3 transition-all duration-300 ease-in-out ${
+              className={`relative cursor-pointer text-[13px] md:text-[14px] lg:text-[15px] font-semibold pb-2 md:pb-3 transition-all duration-300 ease-in-out ${
                 isActive
                   ? "text-transparent"
                   : "text-[#495057] hover:text-[#212529]"

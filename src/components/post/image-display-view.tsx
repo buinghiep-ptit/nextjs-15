@@ -36,7 +36,7 @@ export default function ImageDisplayView({
 
       {/* 2 ảnh: Chia đôi ngang, cả 2 đều vuông */}
       {images.length === 2 && (
-        <div className="flex gap-1" onClick={onImageClick}>
+        <div className="flex gap-1 sm:gap-2" onClick={onImageClick}>
           {images.map((image, index) => (
             <div
               key={index}
@@ -56,7 +56,7 @@ export default function ImageDisplayView({
       {/* 3 ảnh: 1 ảnh lớn bên trái, 2 ảnh nhỏ xếp dọc bên phải */}
       {images.length === 3 && (
         <div
-          className="flex gap-1 cursor-pointer"
+          className="flex gap-1 sm:gap-2 cursor-pointer"
           style={{ aspectRatio: "2/1" }}
           onClick={onImageClick}
         >
@@ -68,7 +68,7 @@ export default function ImageDisplayView({
               className="object-cover hover:opacity-95 transition-opacity"
             />
           </div>
-          <div className="flex flex-col gap-1 flex-1">
+          <div className="flex flex-col gap-1 sm:gap-2 flex-1">
             {images.slice(1).map((image, index) => (
               <div
                 key={index + 1}
@@ -89,7 +89,7 @@ export default function ImageDisplayView({
       {/* 4 ảnh: Grid 2x2, tất cả đều vuông */}
       {images.length === 4 && (
         <div
-          className="grid grid-cols-2 gap-1 aspect-square cursor-pointer"
+          className="grid grid-cols-2 gap-1 sm:gap-2 aspect-square cursor-pointer"
           onClick={onImageClick}
         >
           {images.map((image, index) => (
@@ -111,7 +111,7 @@ export default function ImageDisplayView({
       {/* 5+ ảnh: 1 ảnh lớn bên trái, 4 ảnh nhỏ bên phải (ảnh thứ 5 bị làm mờ kèm "+x") */}
       {images.length >= 5 && (
         <div
-          className="flex gap-1 cursor-pointer"
+          className="flex gap-1 sm:gap-2 cursor-pointer"
           style={{ aspectRatio: "2/1" }}
           onClick={onImageClick}
         >
@@ -123,7 +123,7 @@ export default function ImageDisplayView({
               className="object-cover hover:opacity-95 transition-opacity"
             />
           </div>
-          <div className="grid grid-cols-2 gap-1 flex-1">
+          <div className="grid grid-cols-2 gap-1 sm:gap-2 flex-1">
             {images.slice(1, 5).map((image, index) => (
               <div
                 key={index + 1}
@@ -138,7 +138,7 @@ export default function ImageDisplayView({
                 {/* Overlay cho ảnh thứ 5 */}
                 {index === 3 && images.length > 5 && (
                   <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                    <span className="text-white text-[15px] font-medium leading-[20px]">
+                    <span className="text-white text-[13px] sm:text-[15px] font-medium leading-tight sm:leading-[20px]">
                       +{images.length - 5}
                     </span>
                   </div>

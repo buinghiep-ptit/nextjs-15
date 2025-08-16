@@ -31,6 +31,7 @@ export function ButtonGradientOutlined({
         {...props}
         variant="ghost"
         className={cn(
+          "text-xs sm:text-sm",
           className,
           isActive ? "text-white hover:text-white hover:bg-[#6A46DB]" : ""
         )}

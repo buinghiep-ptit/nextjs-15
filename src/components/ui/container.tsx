@@ -3,7 +3,7 @@ import React, { JSX } from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const containerVariants = cva("w-full mx-auto px-4 sm:px-6 lg:px-8", {
+const containerVariants = cva("w-full mx-auto px-3 sm:px-4 md:px-6 lg:px-8", {
   variants: {
     maxWidth: {
       xs: "max-w-sm", // ~475px
