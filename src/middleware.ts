@@ -1,9 +1,15 @@
 import createMiddleware from "next-intl/middleware";
 import { routing } from "@/i18n/routing";
 import { NextRequest, NextResponse } from "next/server";
-import { ACCESS_TOKEN_KEY } from "@/constants";
+import {
+  ACCESS_TOKEN_KEY,
+  REFRESH_TOKEN_KEY,
+  SESSION_TIMEOUT,
+  TOKEN_REFRESH_BUFFER_SECONDS,
+} from "@/constants";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
-const privatePaths = ["/community"];
+const privatePaths = ["/community", "/profile", "/media"];
 const authPaths = ["/login", "/register"];
 
 const matchPath = (pathname: string, paths: string[]): boolean => {
@@ -19,8 +25,7 @@ const matchPath = (pathname: string, paths: string[]): boolean => {
 };
 
 const getPathnameWithoutLocale = (pathname: string): string => {
-  // Import your locales from routing config
-  const locales = routing.locales; // Use from routing config
+  const locales = routing.locales;
   const segments = pathname.split("/");
 
   // If first segment is a locale, remove it
@@ -33,7 +38,113 @@ const getPathnameWithoutLocale = (pathname: string): string => {
 
 const intlMiddleware = createMiddleware(routing);
 
-export default function middleware(request: NextRequest) {
+interface TokenPayload {
+  accessToken?: string;
+  refreshToken?: string;
+  expiresIn?: number;
+}
+
+const isTokenExpired = (token: string): boolean => {
+  try {
+    const decoded = jwtDecode<JwtPayload>(token);
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decoded.exp! <= currentTime + TOKEN_REFRESH_BUFFER_SECONDS;
+  } catch {
+    return true;
+  }
+};
+
+const clearCookiesAndRedirect = (
+  request: NextRequest,
+  redirectPath: string
+): NextResponse => {
+  const response = NextResponse.redirect(new URL(redirectPath, request.url));
+
+  response.cookies.delete(ACCESS_TOKEN_KEY);
+  response.cookies.delete(REFRESH_TOKEN_KEY);
+
+  return response;
+};
+
+const updateCookies = (
+  response: NextResponse,
+  accessToken: string,
+  refreshToken: string
+): void => {
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    path: "/",
+  };
+
+  console.log("🔄 Updating cookies with new tokens");
+
+  response.cookies.set(ACCESS_TOKEN_KEY, accessToken, {
+    ...cookieOptions,
+    maxAge: SESSION_TIMEOUT,
+  });
+
+  response.cookies.set(REFRESH_TOKEN_KEY, refreshToken, {
+    ...cookieOptions,
+    maxAge: SESSION_TIMEOUT * 2, // Refresh token lives longer
+  });
+};
+
+let isRefreshing = false;
+let refreshPromise: Promise<TokenPayload> | null = null;
+
+export const refreshAccessToken = async (
+  refreshToken: string
+): Promise<TokenPayload> => {
+  // If already refreshing, return the existing promise
+  if (isRefreshing && refreshPromise) {
+    return refreshPromise;
+  }
+
+  isRefreshing = true;
+
+  refreshPromise = (async () => {
+    try {
+      console.log("🔄 Attempting to refresh access token...");
+
+      const response = await fetch(
+        "https://dapi-pmen.aiaracorp.com/api/v1/auth/refresh",
+        {
+          method: "POST",
+          body: JSON.stringify({ refresh_token: refreshToken }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Refresh failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      console.log("✅ Token refresh successful");
+
+      return {
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token || refreshToken, // Use new refresh token if provided
+        expiresIn: data.expires_in,
+      };
+    } catch (error) {
+      console.error("❌ Token refresh failed:", error);
+      throw error;
+    } finally {
+      isRefreshing = false;
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
+};
+
+export default async function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   // Skip static files and API routes
@@ -62,28 +173,94 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  // Continue with existing logic only if we have a locale or it's root path
-  const sessionToken = request.cookies.get(ACCESS_TOKEN_KEY)?.value;
   const locale =
     firstSegment && hasLocale ? firstSegment : routing.defaultLocale;
-
-  console.log("sessionToken", sessionToken);
 
   const pathnameWithoutLocale = getPathnameWithoutLocale(pathname);
   const isPrivatePath = matchPath(pathnameWithoutLocale, privatePaths);
   const isAuthPath = matchPath(pathnameWithoutLocale, authPaths);
 
-  if (isPrivatePath && !sessionToken) {
-    const loginUrl = new URL(`/${locale}/login`, request.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
+  // Get tokens from cookies
+  const sessionToken = request.cookies.get(ACCESS_TOKEN_KEY)?.value;
+  const refreshToken = request.cookies.get(REFRESH_TOKEN_KEY)?.value;
+
+  // If no tokens at all
+  if (!sessionToken || !refreshToken) {
+    if (isPrivatePath) {
+      console.log("🚫 No tokens found, redirecting to home");
+      const homeUrl = new URL(`/${locale}/home`, request.url);
+      homeUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(homeUrl);
+    }
+    return intlMiddleware(request);
   }
 
-  if (isAuthPath && sessionToken) {
+  // Check if user is trying to access auth pages while already authenticated
+  if (isAuthPath && !isTokenExpired(sessionToken)) {
     return NextResponse.redirect(new URL(`/${locale}`, request.url));
   }
 
-  return intlMiddleware(request);
+  let response: NextResponse;
+  let currentAccessToken = sessionToken;
+  let currentRefreshToken = refreshToken;
+
+  // Check if access token is expired
+  if (isTokenExpired(sessionToken)) {
+    console.log("⏰ Access token expired, attempting refresh");
+
+    try {
+      const newTokens = await refreshAccessToken(refreshToken);
+
+      if (newTokens.accessToken) {
+        currentAccessToken = newTokens.accessToken;
+        if (newTokens.refreshToken) {
+          currentRefreshToken = newTokens.refreshToken;
+        }
+
+        console.log("✅ Using refreshed tokens");
+      } else {
+        throw new Error("No access token received from refresh");
+      }
+    } catch (error) {
+      console.error("❌ Failed to refresh token:", error);
+
+      if (isPrivatePath) {
+        console.log(
+          "🚫 Token refresh failed for private route, redirecting to home"
+        );
+        const homeUrl = new URL(`/${locale}/home`, request.url);
+        homeUrl.searchParams.set("callbackUrl", pathname);
+        return clearCookiesAndRedirect(request, homeUrl.toString());
+      }
+
+      // For non-private routes, clear cookies but continue
+      response = intlMiddleware(request);
+      response.cookies.delete(ACCESS_TOKEN_KEY);
+      response.cookies.delete(REFRESH_TOKEN_KEY);
+      return response;
+    }
+  }
+
+  // Now check if the current token (original or refreshed) is valid
+  if (isPrivatePath && isTokenExpired(currentAccessToken)) {
+    console.log("🚫 Current token is still expired, redirecting to home");
+    const homeUrl = new URL(`/${locale}/home`, request.url);
+    homeUrl.searchParams.set("callbackUrl", pathname);
+    return clearCookiesAndRedirect(request, homeUrl.toString());
+  }
+
+  // Create response with intl middleware
+  response = intlMiddleware(request);
+
+  // If we have new tokens, update cookies
+  if (
+    currentAccessToken !== sessionToken ||
+    currentRefreshToken !== refreshToken
+  ) {
+    updateCookies(response, currentAccessToken, currentRefreshToken);
+  }
+
+  return response;
 }
 
 export const config = {

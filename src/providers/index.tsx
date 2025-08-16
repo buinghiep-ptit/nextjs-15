@@ -4,10 +4,16 @@ import { ThemeProvider } from "./theme-provider";
 import AuthProvider from "./auth-provider";
 import { ArtistProvider } from "./artist-provider";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+  initialSessionToken,
+}: {
+  children: React.ReactNode;
+  initialSessionToken?: string;
+}) {
   return (
     <ErrorBoundary>
-      <AuthProvider>
+      <AuthProvider initialSessionToken={initialSessionToken}>
         <ThemeProvider
           attribute="class"
           defaultTheme="systeq"

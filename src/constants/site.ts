@@ -12,6 +12,9 @@ export const siteConfig = {
 
 export const locales = ["en", "vi"] as const;
 
-export const ACCESS_TOKEN_KEY = "jwt_access_token";
-export const REFRESH_TOKEN_KEY = "jwt_refresh_token";
+export const ACCESS_TOKEN_KEY = "fv_access_token";
+export const REFRESH_TOKEN_KEY = "fv_refresh_token";
 export const USER_INFO_STORAGE_KEY = "user_info";
+
+export const SESSION_TIMEOUT = 3600;
+export const TOKEN_REFRESH_BUFFER_SECONDS = 3540;

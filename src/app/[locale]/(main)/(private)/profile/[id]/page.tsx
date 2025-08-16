@@ -1,12 +1,13 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Container } from "@/components/ui/container";
-import React from "react";
+import React, { useEffect } from "react";
 import ProfileInfo from "@/components/profile/profile-info";
 import EditProfileButton from "@/components/profile/edit-profile-button";
 import ProfileMoreMenu from "@/components/profile/profile-more-menu";
 import ProfilePostsList from "@/components/profile/profile-posts-list";
 import EditProfileModal from "@/components/profile/edit-profile-modal";
+import { getMe } from "@/services/auth.service";
 
 export default function ProfilePage() {
   // Mock data - in real app, this would come from props/API
@@ -27,6 +28,12 @@ export default function ProfilePage() {
       "Singer 🥳 Music Creator 💖 Live Show Addict 🤗 🌈\n1M+ views trên TikTok 🔥 Collab với 10k+ người hâm mộ 🥰😘",
     birthday: "Mar 01, 1997",
   };
+
+  useEffect(() => {
+    getMe().then((res) => {
+      console.log("res", res);
+    });
+  }, []);
 
   const handleEditProfile = () => {
     setIsEditModalOpen(true);

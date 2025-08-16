@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import HeaderLeft from "./header-left";
 import HeaderRight from "./header-right";
 import { Container } from "@/components/ui/container";
@@ -12,8 +13,9 @@ export default function Header({ showArtistDropdown = true }: HeaderProps) {
       <Container className="py-4">
         <div className="rounded-[20px] min-h-[84px] bg-white px-6 flex justify-between items-center">
           <HeaderLeft showArtistDropdown={showArtistDropdown} />
-
-          <HeaderRight />
+          <Suspense fallback={<div>Loading...</div>}>
+            <HeaderRight />
+          </Suspense>
         </div>
       </Container>
     </header>
