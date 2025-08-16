@@ -68,10 +68,10 @@ export default function ProfilePage() {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
-        className="py-14"
+        className="py-8 sm:py-10 md:py-14"
       >
         <Container maxWidth="md" className="relative">
-          <div className="flex flex-col lg:flex-row items-center lg:items-center gap-12">
+          <div className="flex flex-col lg:flex-row items-center lg:items-center gap-6 sm:gap-8 md:gap-10 lg:gap-12">
             {/* Avatar Section */}
             <div className="flex-shrink-0">
               {author.isKOL ? (
@@ -80,9 +80,9 @@ export default function ProfilePage() {
                     background:
                       "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #0052D4 113.46%)",
                   }}
-                  className="w-45 h-55 p-2 rounded-tl-[100px] rounded-tr-[100px] rounded-bl-xl rounded-br-xl flex items-center justify-center overflow-hidden"
+                  className="w-32 h-40 sm:w-36 sm:h-44 md:w-40 md:h-48 lg:w-45 lg:h-55 p-1.5 sm:p-2 rounded-tl-[80px] rounded-tr-[80px] sm:rounded-tl-[100px] sm:rounded-tr-[100px] rounded-bl-lg rounded-br-lg sm:rounded-bl-xl sm:rounded-br-xl flex items-center justify-center overflow-hidden"
                 >
-                  <Avatar className="w-full h-full rounded-tl-[100px] rounded-tr-[100px] rounded-bl-lg rounded-br-lg">
+                  <Avatar className="w-full h-full rounded-tl-[75px] rounded-tr-[75px] sm:rounded-tl-[100px] sm:rounded-tr-[100px] rounded-bl-lg rounded-br-lg">
                     <AvatarImage
                       src={author.avatar}
                       alt={author.name}
@@ -97,7 +97,7 @@ export default function ProfilePage() {
                     background:
                       "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #0052D4 113.46%)",
                   }}
-                  className="w-45 h-45 p-2 rounded-full flex items-center justify-center"
+                  className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-45 lg:h-45 p-1.5 sm:p-2 rounded-full flex items-center justify-center"
                 >
                   <Avatar className="w-full h-full bg-white">
                     <AvatarImage src={author.avatar} alt={author.name} />
@@ -118,7 +118,7 @@ export default function ProfilePage() {
               />
 
               {isOwnProfile && (
-                <div className="mt-6 flex justify-start">
+                <div className="mt-4 sm:mt-5 md:mt-6 flex justify-start">
                   <EditProfileButton onClick={handleEditProfile} />
                 </div>
               )}

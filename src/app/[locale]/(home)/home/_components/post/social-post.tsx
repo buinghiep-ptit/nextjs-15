@@ -82,7 +82,7 @@ const CommentInput = ({
 
   return (
     <div className="flex items-center space-x-3 mt-3">
-      <Avatar className="w-8 h-8">
+      <Avatar className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8">
         <AvatarImage src="/images/user-avatar.png" alt="Your avatar" />
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
@@ -169,7 +169,7 @@ const CommentItem = ({
   return (
     <div>
       <div className="flex items-start space-x-3">
-        <Avatar className="w-10 h-10">
+        <Avatar className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
           <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
           <AvatarFallback>{comment.author.name[0]}</AvatarFallback>
         </Avatar>
@@ -455,7 +455,7 @@ export default function EnhancedSocialPost({
         {/* Header */}
         <div className="flex items-start justify-between mb-3 px-4">
           <div className="flex items-start space-x-3">
-            <Avatar className="w-12 h-12">
+            <Avatar className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
               <AvatarImage src={author.avatar} alt={author.name} />
               <AvatarFallback>{author.name[0]}</AvatarFallback>
             </Avatar>

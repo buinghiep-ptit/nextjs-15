@@ -95,7 +95,13 @@ const CommentInput = ({
 
   return (
     <div className="box-border flex flex-row gap-3 items-start justify-start relative w-full">
-      <Avatar className={isReply ? "w-9 h-9 shrink-0" : "w-12 h-12 shrink-0"}>
+      <Avatar
+        className={
+          isReply
+            ? "w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 shrink-0"
+            : "w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 shrink-0"
+        }
+      >
         <AvatarImage src="/images/user-avatar.png" alt="Your avatar" />
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
@@ -108,7 +114,7 @@ const CommentInput = ({
       >
         <div
           className={`relative flex flex-row gap-3 items-center ${
-            isReply ? "h-9" : "h-12"
+            isReply ? "h-7 sm:h-8 md:h-9" : "h-8 sm:h-10 md:h-12"
           } px-4 bg-white rounded-[360px] hover:bg-gray-50 focus-within:bg-gray-50 transition-colors duration-300`}
         >
           <Input
@@ -116,7 +122,7 @@ const CommentInput = ({
             onChange={(e) => setComment(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder={placeholder}
-            className="flex-1 border-0 text-[15px] font-normal leading-[20px] focus-visible:ring-0 p-0 h-full bg-transparent placeholder:text-[var(--muted-foreground)]"
+            className="flex-1 border-0 text-xs sm:text-sm md:text-[15px] font-normal leading-tight md:leading-[20px] focus-visible:ring-0 p-0 h-full bg-transparent placeholder:text-[var(--muted-foreground)]"
             autoFocus={autoFocus}
           />
           <div className="flex flex-row gap-4 items-center">
@@ -197,15 +203,23 @@ const CommentItem = ({
   return (
     <div>
       <div className="flex items-start space-x-3">
-        <Avatar className={comment.level === 0 ? "w-12 h-12" : "w-8 h-8"}>
+        <Avatar
+          className={
+            comment.level === 0
+              ? "w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+              : "w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8"
+          }
+        >
           <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
           <AvatarFallback>{comment.author.name[0]}</AvatarFallback>
         </Avatar>
 
         <div className="flex-1 space-y-2 flex flex-col items-start">
-          <div className="px-4 py-3 bg-[var(--background)] w-auto rounded-2xl">
+          <div className="px-3 sm:px-4 py-2 sm:py-3 bg-[var(--background)] w-auto rounded-xl sm:rounded-2xl">
             <div className="flex items-center space-x-2 mb-1">
-              <h4 className="font-bold text-[15px]">{comment.author.name}</h4>
+              <h4 className="font-bold text-[13px] sm:text-[14px] md:text-[15px]">
+                {comment.author.name}
+              </h4>
               {comment.author.isVerified && (
                 <Image
                   src="/icons/tick.svg"
@@ -215,7 +229,7 @@ const CommentItem = ({
                 />
               )}
             </div>
-            <p className="text-[15px]">
+            <p className="text-xs sm:text-sm md:text-[15px]">
               {comment.replyTo && (
                 <span className="text-blue-600 font-medium">
                   @{comment.replyTo}{" "}
@@ -225,14 +239,14 @@ const CommentItem = ({
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 px-4 text-sm">
+          <div className="flex flex-wrap items-center gap-2 px-2 sm:px-4 text-xs sm:text-sm">
             <span className="text-[var(--muted-foreground)]">
               {comment.timestamp}
             </span>
 
             <Button
               variant="ghost"
-              className="font-normal text-sm h-auto"
+              className="font-normal text-xs sm:text-sm h-auto p-1 sm:p-2"
               onClick={() =>
                 onToggleReply(showReplyInput === comment.id ? null : comment.id)
               }
@@ -240,11 +254,11 @@ const CommentItem = ({
               Trả lời
             </Button>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
               {commentReactions.map((reaction, index) => (
                 <ButtonGradientOutlined
                   key={index}
-                  className="rounded-full h-8 px-3 font-normal text-sm"
+                  className="rounded-full h-7 sm:h-8 px-2 sm:px-3 font-normal text-xs sm:text-sm"
                   isActive={reaction.isActive}
                   onClick={() => toggleCommentReaction(reaction.emoji)}
                 >
@@ -259,7 +273,7 @@ const CommentItem = ({
               ))}
               <Popover>
                 <PopoverTrigger asChild>
-                  <ButtonGradientOutlined className="rounded-full h-8 px-2">
+                  <ButtonGradientOutlined className="rounded-full h-7 sm:h-8 px-1 sm:px-2">
                     <Image
                       src="/icons/add-emoji.svg"
                       alt="Add Emoji"
@@ -504,18 +518,18 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         showCloseButton={false}
-        className="max-w-2xl lg:w-1/2 h-screen py-4 px-0 border-0 bg-white overflow-hidden rounded-none"
+        className="w-full sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:w-1/2 h-screen py-3 sm:py-4 px-0 border-0 bg-white overflow-hidden rounded-none"
         overlayClassName="bg-[rgba(14,15,17,0.50)] backdrop-blur-[8px]"
       >
         <DialogTitle className="sr-only">Chi tiết bài viết</DialogTitle>
 
-        <div className="h-full overflow-y-auto px-6">
+        <div className="h-full overflow-y-auto px-3 sm:px-4 md:px-6">
           {/* Main Post */}
           <div className="bg-white">
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-start space-x-3">
-                <Avatar className="w-12 h-12">
+                <Avatar className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
                   <AvatarImage
                     src={post.author.avatar}
                     alt={post.author.name}
@@ -525,20 +539,21 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
 
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
-                    <h3 className="font-bold text-[15px]">
+                    <h3 className="font-bold text-[13px] sm:text-[14px] md:text-[15px]">
                       {post.author.name}
                     </h3>
                     {post.author.isVerified && (
                       <Image
                         src="/icons/tick.svg"
                         alt="Verified"
-                        width={16}
-                        height={16}
+                        width={14}
+                        height={14}
+                        className="w-3 h-3 sm:w-4 sm:h-4 md:w-4 md:h-4"
                       />
                     )}
                   </div>
 
-                  <div className="flex items-center space-x-2.5 text-sm text-[var(--muted-foreground)]">
+                  <div className="flex items-center space-x-1.5 sm:space-x-2 md:space-x-2.5 text-xs sm:text-xs md:text-sm text-[var(--muted-foreground)]">
                     <span>{post.timestamp}</span>
                     <span>•</span>
                     <div className="flex items-center space-x-1">
@@ -575,7 +590,9 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
 
             {/* Content */}
             <div className="mb-4">
-              <p className="text-sm">{post.content}</p>
+              <p className="text-xs sm:text-sm md:text-[15px]">
+                {post.content}
+              </p>
             </div>
 
             {/* Images */}
@@ -586,10 +603,10 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
             )}
 
             {/* Reactions */}
-            <div className="flex items-center space-x-2 mb-4">
+            <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-3 sm:mb-4">
               {postReactions.map((reaction, index) => (
                 <ButtonGradientOutlined
-                  className="rounded-full h-8.5 px-3 font-normal text-sm"
+                  className="rounded-full h-7 sm:h-8 px-2 sm:px-3 font-normal text-xs sm:text-sm md:text-sm"
                   key={index}
                   isActive={reaction.isActive}
                   onClick={() => togglePostReaction(reaction.emoji)}
@@ -597,22 +614,24 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
                   <Image
                     src={`/icons/emoji/${reaction.emoji}.svg`}
                     alt="Emoji"
-                    width={20}
-                    height={20}
+                    width={16}
+                    height={16}
+                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5"
                   />
                   <span>{reaction.count}</span>
                 </ButtonGradientOutlined>
               ))}
 
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1 sm:mt-0">
                 <Popover>
                   <PopoverTrigger asChild>
-                    <ButtonGradientOutlined className="rounded-full h-8.5 px-2">
+                    <ButtonGradientOutlined className="rounded-full h-7 sm:h-8 px-1 sm:px-2">
                       <Image
                         src="/icons/add-emoji.svg"
                         alt="Add Emoji"
-                        width={24}
-                        height={24}
+                        width={18}
+                        height={18}
+                        className="w-4 h-4 sm:w-5 sm:h-5"
                       />
                     </ButtonGradientOutlined>
                   </PopoverTrigger>
@@ -631,8 +650,9 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
                           <Image
                             src={emoji.src}
                             alt="Emoji"
-                            width={24}
-                            height={24}
+                            width={20}
+                            height={20}
+                            className="w-5 h-5 sm:w-6 sm:h-6"
                           />
                         </button>
                       ))}
@@ -640,12 +660,13 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
                   </PopoverContent>
                 </Popover>
 
-                <ButtonGradientOutlinedGreen className="rounded-full h-7.5">
+                <ButtonGradientOutlinedGreen className="rounded-full h-7 sm:h-8">
                   <Image
                     src="/icons/share-icon.png"
                     alt="Share"
-                    width={18}
-                    height={14}
+                    width={16}
+                    height={12}
+                    className="w-4 h-3 sm:w-[18px] sm:h-[14px]"
                   />
                 </ButtonGradientOutlinedGreen>
               </div>
@@ -687,7 +708,7 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
           </div>
 
           {/* Fixed Comment Input at Bottom */}
-          <div className="absolute bottom-0 left-0 right-0 bg-white px-6 py-4">
+          <div className="absolute bottom-0 left-0 right-0 bg-white px-3 sm:px-4 md:px-6 py-3 sm:py-4">
             <CommentInput onSubmit={addComment} autoFocus={false} />
           </div>
         </div>

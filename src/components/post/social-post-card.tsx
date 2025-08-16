@@ -81,11 +81,11 @@ const CommentReactions = ({
   } = useReactions(reactions);
 
   return (
-    <div className="flex items-center space-x-1 sm:space-x-2">
+    <div className="flex flex-wrap items-center gap-1 sm:gap-2">
       {commentReactions.map((reaction, index) => (
         <ButtonGradientOutlined
           key={index}
-          className="rounded-full h-7 sm:h-8 px-2 sm:px-3 font-normal text-xs sm:text-sm"
+          className="rounded-full h-7 sm:h-8 px-2 sm:px-3 font-normal text-xs sm:text-sm md:text-sm"
           isActive={reaction.isActive}
           onClick={(e) => {
             e.stopPropagation();
@@ -168,10 +168,10 @@ const ContentWithReadMore = React.memo(
     }, [content]);
 
     return (
-      <div className="text-xs sm:text-sm relative">
+      <div className="text-xs sm:text-sm md:text-[15px] relative">
         <div
           ref={contentRef}
-          className="text-xs sm:text-sm"
+          className="text-xs sm:text-sm md:text-[15px]"
           style={{
             display: "-webkit-box",
             WebkitLineClamp: "3",
@@ -188,7 +188,7 @@ const ContentWithReadMore = React.memo(
           <div className="text-right mt-1">
             <button
               onClick={onReadMore}
-              className="text-[var(--muted-foreground)] hover:underline text-xs sm:text-sm"
+              className="text-[var(--muted-foreground)] hover:underline text-xs sm:text-sm md:text-[15px]"
             >
               ...Xem thêm
             </button>
@@ -261,7 +261,7 @@ export default function SocialPostCard({
 
           <div>
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="font-bold text-[13px] sm:text-[15px]">
+              <h3 className="font-bold text-[13px] sm:text-[15px] md:text-[15px]">
                 {author.name}
               </h3>
               {author.isVerified && (
@@ -275,7 +275,7 @@ export default function SocialPostCard({
               )}
             </div>
 
-            <div className="flex items-center space-x-1.5 sm:space-x-2.5 text-xs sm:text-sm text-[var(--muted-foreground)]">
+            <div className="flex items-center space-x-1.5 sm:space-x-2.5 text-xs sm:text-sm md:text-sm text-[var(--muted-foreground)]">
               <span>{timestamp}</span>
               <span>•</span>
               <div className="flex items-center space-x-1">
@@ -349,10 +349,10 @@ export default function SocialPostCard({
 
       {/* Reactions */}
       {!isPremium && (
-        <div className="flex items-center space-x-1 sm:space-x-2 mb-0 px-3 sm:px-4">
+        <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-0 px-3 sm:px-4">
           {postReactions.map((reaction, index) => (
             <ButtonGradientOutlined
-              className="rounded-full h-7 sm:h-8 px-2 sm:px-3 font-normal text-xs sm:text-sm"
+              className="rounded-full h-7 sm:h-8 px-2 sm:px-3 font-normal text-xs sm:text-sm md:text-sm"
               key={index}
               isActive={reaction.isActive}
               onClick={() => togglePostReaction(reaction.emoji)}
@@ -368,7 +368,7 @@ export default function SocialPostCard({
             </ButtonGradientOutlined>
           ))}
 
-          <div className="flex items-center space-x-1 sm:space-x-2">
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1 sm:mt-0">
             <Popover>
               <PopoverTrigger asChild>
                 <ButtonGradientOutlined className="rounded-full h-7 sm:h-8 px-1 sm:px-2">
@@ -420,7 +420,7 @@ export default function SocialPostCard({
               <Button
                 variant="ghost"
                 onClick={onCommentClick}
-                className="text-xs sm:text-sm text-[var(--muted-foreground)] font-normal h-auto p-1.5 sm:p-2 hover:bg-gray-100 rounded-full"
+                className="text-xs sm:text-sm md:text-sm text-[var(--muted-foreground)] font-normal h-auto p-1.5 sm:p-2 hover:bg-gray-100 rounded-full"
               >
                 <Image
                   src="/icons/comment.svg"
@@ -439,14 +439,14 @@ export default function SocialPostCard({
       {/* Comments Preview for Community variant */}
       {variant === "community" && commentList.length > 0 && (
         <>
-          <div className="h-0.25 bg-[#E9ECEF] mt-4" />
+          <div className="h-0.25 bg-[#E9ECEF] mt-3 sm:mt-4" />
 
           {/* Level 0 Comments Preview */}
-          <div className="px-4 py-4 space-y-4">
+          <div className="px-3 sm:px-4 py-3 sm:py-4 space-y-3 sm:space-y-4">
             {commentList.slice(0, 2).map((comment) => (
               <div key={comment.id}>
-                <div className="flex items-start space-x-3">
-                  <Avatar className="w-12 h-12">
+                <div className="flex items-start space-x-2 sm:space-x-3">
+                  <Avatar className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
                     <AvatarImage
                       src={comment.author.avatar}
                       alt={comment.author.name}
@@ -455,31 +455,34 @@ export default function SocialPostCard({
                   </Avatar>
 
                   <div className="flex-1 flex flex-col items-start">
-                    <div className="px-4 py-3 bg-[var(--background)] rounded-2xl">
+                    <div className="px-3 sm:px-4 py-2 sm:py-3 bg-[var(--background)] rounded-xl sm:rounded-2xl">
                       <div className="flex items-center space-x-2 mb-1">
-                        <h4 className="font-bold text-[15px]">
+                        <h4 className="font-bold text-[13px] sm:text-[15px] md:text-[15px]">
                           {comment.author.name}
                         </h4>
                         {comment.author.isVerified && (
                           <Image
                             src="/icons/tick.svg"
                             alt="Verified"
-                            width={16}
-                            height={16}
+                            width={14}
+                            height={14}
+                            className="w-3 h-3 sm:w-4 sm:h-4"
                           />
                         )}
                       </div>
-                      <p className="text-[15px]">{comment.content}</p>
+                      <p className="text-xs sm:text-sm md:text-[15px]">
+                        {comment.content}
+                      </p>
                     </div>
 
-                    <div className="flex items-center space-x-2 px-4 text-sm mt-2">
+                    <div className="flex items-center flex-wrap gap-2 px-2 sm:px-4 text-xs sm:text-sm md:text-sm mt-1 sm:mt-2">
                       <span className="text-[var(--muted-foreground)]">
                         {comment.timestamp}
                       </span>
 
                       <Button
                         variant="ghost"
-                        className="font-normal text-sm h-auto"
+                        className="font-normal text-xs sm:text-sm md:text-sm h-auto p-1 sm:p-2"
                         onClick={(e) => {
                           e.stopPropagation();
                           onCommentClick();
@@ -493,10 +496,10 @@ export default function SocialPostCard({
 
                     {/* Show replies count if any */}
                     {comment.replies && comment.replies.length > 0 && (
-                      <div className="flex flex-row gap-1 items-center justify-start mt-2">
+                      <div className="flex flex-row gap-1 items-center justify-start mt-1 sm:mt-2">
                         <div className="w-6 h-0.25 bg-[var(--muted-foreground)] rounded-full" />
                         <span
-                          className="text-[15px] text-[var(--muted-foreground)] font-normal cursor-pointer"
+                          className="text-xs sm:text-sm md:text-[15px] text-[var(--muted-foreground)] font-normal cursor-pointer"
                           onClick={onCommentClick}
                         >
                           Xem thêm {comment.replies.length} bình luận
@@ -513,7 +516,7 @@ export default function SocialPostCard({
               <Button
                 variant="ghost"
                 onClick={onCommentClick}
-                className="text-sm text-[var(--muted-foreground)] font-normal w-full"
+                className="text-xs sm:text-sm md:text-sm text-[var(--muted-foreground)] font-normal w-full py-1 sm:py-2"
               >
                 Xem thêm {commentList.length - 2} bình luận
               </Button>

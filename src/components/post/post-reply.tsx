@@ -33,7 +33,7 @@ export function PostReply({
   return (
     <div className="px-4">
       <div className="flex items-start space-x-3">
-        <Avatar className="w-10 h-10">
+        <Avatar className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10">
           <AvatarImage src={reply.author.avatar} alt={reply.author.name} />
           <AvatarFallback>{reply.author.name[0]}</AvatarFallback>
         </Avatar>

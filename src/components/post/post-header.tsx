@@ -27,7 +27,7 @@ export function PostHeader({
   return (
     <div className="flex items-start justify-between mb-3 px-4">
       <div className="flex items-start space-x-3">
-        <Avatar className="w-12 h-12">
+        <Avatar className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
           <AvatarImage src={author.avatar} alt={author.name} />
           <AvatarFallback>{author.name[0]}</AvatarFallback>
         </Avatar>
