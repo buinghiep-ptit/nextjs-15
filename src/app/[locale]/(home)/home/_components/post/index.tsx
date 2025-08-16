@@ -1,6 +1,7 @@
 "use client";
 import PostWithModal from "@/components/post/post-with-modal";
 import { Container } from "@/components/ui/container";
+import { useAuthContext } from "@/providers/auth-provider";
 
 interface Comment {
   id: string;
@@ -43,6 +44,8 @@ interface PostData {
 }
 
 export default function EnhancedSocialFeed() {
+  const { sessionToken } = useAuthContext();
+
   const postsData: PostData[] = [
     {
       id: "post-1",
@@ -397,6 +400,10 @@ export default function EnhancedSocialFeed() {
       ],
     },
   ];
+
+  if (!sessionToken) {
+    return null;
+  }
 
   return (
     <div className="bg-[#F1F3F5] pb-16">

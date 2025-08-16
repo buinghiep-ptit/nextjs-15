@@ -11,8 +11,11 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
+import { useAuthContext } from "@/providers/auth-provider";
 
 export default function MyCommunities() {
+  const { sessionToken } = useAuthContext();
+
   const [api, setApi] = React.useState<CarouselApi>();
   const [activeCommunity, setActiveCommunity] = React.useState<string | null>(
     null
@@ -55,6 +58,10 @@ export default function MyCommunities() {
       badge: "/images/home/trending/artist-avatar.png",
     },
   ];
+
+  if (!sessionToken) {
+    return null;
+  }
 
   return (
     <Container className="md:my-16 my-6">

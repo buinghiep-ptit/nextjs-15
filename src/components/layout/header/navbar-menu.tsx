@@ -12,7 +12,7 @@ export default function NavbarMenu() {
   // Extract locale from pathname (e.g., /en/artist -> en)
   const locale = pathname.split("/")[1] || "vi";
 
-  const artistSlug = generateArtistSlug(currentArtist);
+  const artistSlug = currentArtist ? generateArtistSlug(currentArtist) : "";
 
   const navItems = [
     {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Popover,
   PopoverContent,
@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useArtist } from "@/providers/artist-provider";
 import { useRouter, usePathname } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Artist {
   id: string;
@@ -22,58 +23,95 @@ interface Artist {
 export default function ArtistDropdown() {
   const { currentArtist, setCurrentArtist, generateArtistSlug } = useArtist();
   const [isOpen, setIsOpen] = useState(false);
+  const [artists, setArtists] = useState<Artist[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
-  // Mock data for artists
-  const artists: Artist[] = [
-    {
-      id: "tayguyen",
-      name: "TaynguyenSound",
-      avatar: "/images/home/trending/artist-avatar.png",
-      isVerified: true,
-      followerCount: "2.5M",
-    },
-    {
-      id: "sontung",
-      name: "Sơn Tùng M-TP",
-      avatar: "/images/home/trending/artist-avatar.png",
-      isVerified: true,
-      followerCount: "8.2M",
-    },
-    {
-      id: "denvau",
-      name: "Đen Vâu",
-      avatar: "/images/home/trending/artist-avatar.png",
-      isVerified: true,
-      followerCount: "3.1M",
-    },
-    {
-      id: "hoangthuylinh",
-      name: "Hoàng Thùy Linh",
-      avatar: "/images/home/trending/artist-avatar.png",
-      isVerified: true,
-      followerCount: "1.8M",
-    },
-    {
-      id: "blackpink",
-      name: "BLACKPINK",
-      avatar: "/images/home/trending/artist-avatar.png",
-      isVerified: true,
-      followerCount: "15.2M",
-    },
-    {
-      id: "bichphuong",
-      name: "Bích Phương",
-      avatar: "/images/home/trending/artist-avatar.png",
-      isVerified: true,
-      followerCount: "2.1M",
-    },
-  ];
+  // Fetch artists from API
+  useEffect(() => {
+    const fetchArtists = async () => {
+      try {
+        const response = await fetch("/api/artists");
+        const result = await response.json();
+
+        if (result.success) {
+          setArtists(result.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch artists:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchArtists();
+  }, []);
+
+  // Sync currentArtist with URL on mount and pathname change
+  useEffect(() => {
+    if (!currentArtist || artists.length === 0) return;
+
+    // Check if we're on a page that has artist ID in URL
+    if (
+      pathname.includes("/artistpedia/") ||
+      pathname.includes("/community/") ||
+      pathname.includes("/artists/") ||
+      pathname.includes("/media/")
+    ) {
+      const artistIdFromUrl = pathname.split("/").pop();
+
+      // Find artist by ID from URL
+      const artistFromUrl = artists.find((artist) => {
+        const slug = generateArtistSlug(artist);
+        return slug === artistIdFromUrl;
+      });
+
+      // If found artist from URL and it's different from current, update it
+      if (artistFromUrl && artistFromUrl.id !== currentArtist.id) {
+        setCurrentArtist(artistFromUrl);
+      }
+    }
+  }, [pathname, currentArtist, setCurrentArtist, generateArtistSlug, artists]);
+
+  // Set current artist from URL if not set yet
+  useEffect(() => {
+    if (currentArtist || artists.length === 0) return;
+
+    // Check if we're on a page that has artist ID in URL
+    if (
+      pathname.includes("/artistpedia/") ||
+      pathname.includes("/community/") ||
+      pathname.includes("/artists/") ||
+      pathname.includes("/media/")
+    ) {
+      const artistIdFromUrl = pathname.split("/").pop();
+
+      // Find artist by ID from URL
+      const artistFromUrl = artists.find((artist) => {
+        const slug = generateArtistSlug(artist);
+        return slug === artistIdFromUrl;
+      });
+
+      // If found artist from URL, set it
+      if (artistFromUrl) {
+        setCurrentArtist(artistFromUrl);
+        return;
+      }
+    }
+
+    // If no artist found from URL and no current artist, set the first one
+    if (artists.length > 0) {
+      setCurrentArtist(artists[0]);
+    }
+  }, [pathname, currentArtist, setCurrentArtist, generateArtistSlug, artists]);
 
   const handleArtistSelect = (artist: Artist) => {
-    setCurrentArtist(artist);
+    // Close popover immediately to avoid flicker
     setIsOpen(false);
+
+    // Update current artist
+    setCurrentArtist(artist);
 
     // Update URL with new artist slug
     const newArtistSlug = generateArtistSlug(artist);
@@ -94,6 +132,16 @@ export default function ArtistDropdown() {
     }
     // If on other pages (home, profile, etc.), don't change URL
   };
+
+  // Show loading state
+  if (isLoading) {
+    return <Skeleton className="bg-gray-200 w-25 h-7" />;
+  }
+
+  // Don't render if no current artist
+  if (!currentArtist) {
+    return null;
+  }
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>

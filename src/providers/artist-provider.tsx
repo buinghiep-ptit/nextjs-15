@@ -11,7 +11,7 @@ interface Artist {
 }
 
 interface ArtistContextType {
-  currentArtist: Artist;
+  currentArtist: Artist | null;
   setCurrentArtist: (artist: Artist) => void;
   generateArtistSlug: (artist: Artist) => string;
 }
@@ -23,13 +23,7 @@ interface ArtistProviderProps {
 }
 
 export function ArtistProvider({ children }: ArtistProviderProps) {
-  const [currentArtist, setCurrentArtist] = useState<Artist>({
-    id: "tayguyen",
-    name: "TaynguyenSound",
-    avatar: "/images/home/trending/artist-avatar.png",
-    isVerified: true,
-    followerCount: "2.5M",
-  });
+  const [currentArtist, setCurrentArtist] = useState<Artist | null>(null);
 
   // Generate URL slug from artist name + id
   const generateArtistSlug = (artist: Artist): string => {
