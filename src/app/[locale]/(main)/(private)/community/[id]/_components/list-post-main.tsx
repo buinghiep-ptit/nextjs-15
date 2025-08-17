@@ -2,6 +2,9 @@
 import PostWithModal from "@/components/post/post-with-modal";
 import { Container } from "@/components/ui/container";
 import PostInput from "@/components/post/post-input";
+import JoinMembershipCard from "./join-membership-card";
+import IdolCard from "./idol-card";
+import CurrentUserCard from "./current-user-card";
 
 interface Comment {
   id: string;
@@ -429,8 +432,8 @@ export default function ListPostMain() {
       }}
     >
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="space-y-6 col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 lg:gap-14">
+          <div className="space-y-6 col-span-1 md:col-span-2">
             <div className="mb-6">
               <PostInput
                 onSubmit={handleAddComment}
@@ -459,7 +462,18 @@ export default function ListPostMain() {
               />
             ))}
           </div>
-          <div className="space-y-6 col-span-1">Quảng cáo</div>
+          <div className="space-y-6 col-span-1">
+            <IdolCard
+              artistName="HOÀNG THÙY LINH"
+              memberCount="100"
+              imageUrl="/images/communities/idol-card-right.jpg"
+            />
+            <JoinMembershipCard />
+            <CurrentUserCard
+              userName="Hian1170"
+              userAvatar="/icons/avatar-icon.svg"
+            />
+          </div>
         </div>
       </Container>
     </div>

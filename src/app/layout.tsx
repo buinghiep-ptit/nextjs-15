@@ -3,6 +3,9 @@ import { Geist, Inter, Geist_Mono, Phudu } from "next/font/google";
 import "./globals.css";
 import Providers from "@/providers";
 import { cookies } from "next/headers";
+import { Toaster } from "react-hot-toast";
+import Image from "next/image";
+import { XCircleIcon } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,7 +47,30 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${phuDu.variable} antialiased`}
         suppressHydrationWarning
       >
-        <Providers initialSessionToken={sessionToken}>{children}</Providers>
+        <Providers initialSessionToken={sessionToken}>
+          {children}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              className:
+                "!bg-primary !text-white !rounded-full !shadow-none !px-4 !py-3",
+              success: {
+                icon: (
+                  <Image
+                    src="/icons/tick-circle.svg"
+                    alt="Check"
+                    width={24}
+                    height={24}
+                  />
+                ),
+              },
+              error: {
+                icon: <XCircleIcon className="w-6 h-6 text-red-500" />,
+                // className: "bg-red-100 border-l-4 border-red-500 text-red-700",
+              },
+            }}
+          />
+        </Providers>
       </body>
     </html>
   );

@@ -598,7 +598,7 @@ export default function PostModal({ isOpen, onClose, post }: PostModalProps) {
             {/* Images */}
             {post.images && post.images.length > 0 && (
               <div className="mb-4">
-                <ImageDisplayView images={post.images} />
+                <ImageDisplayView images={post.images} isPostDetail={true} />
               </div>
             )}
 

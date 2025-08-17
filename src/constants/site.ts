@@ -16,5 +16,5 @@ export const ACCESS_TOKEN_KEY = "fv_access_token";
 export const REFRESH_TOKEN_KEY = "fv_refresh_token";
 export const USER_INFO_STORAGE_KEY = "user_info";
 
-export const SESSION_TIMEOUT = 3600;
-export const TOKEN_REFRESH_BUFFER_SECONDS = 3540;
+export const SESSION_TIMEOUT = 3600 * 24 * 30; // 30 days
+export const TOKEN_REFRESH_BUFFER_SECONDS = 3500;

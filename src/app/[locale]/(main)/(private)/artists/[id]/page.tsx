@@ -292,12 +292,7 @@ export default function ArtistPage() {
       <ArtistSlider />
 
       {/* Post List Section */}
-      <div
-        className="py-6"
-        style={{
-          background: "linear-gradient(180deg, #FFF 0%, #F1F3F5 6.28%)",
-        }}
-      >
+      <div className="py-6 bg-[#F1F3F5]">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="space-y-6 col-span-2">

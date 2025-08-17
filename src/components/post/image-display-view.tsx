@@ -6,6 +6,7 @@ import Image from "next/image";
 interface ImageDisplayViewProps {
   images: string[];
   onImageClick?: () => void;
+  isPostDetail?: boolean;
 }
 
 // Component cho việc hiển thị ảnh trong view mode (danh sách bài viết và chi tiết)
@@ -13,6 +14,7 @@ interface ImageDisplayViewProps {
 export default function ImageDisplayView({
   images,
   onImageClick,
+  isPostDetail = false,
 }: ImageDisplayViewProps) {
   if (!images || images.length === 0) return null;
 
@@ -29,7 +31,9 @@ export default function ImageDisplayView({
             src={images[0]}
             alt="Post image"
             fill
-            className="object-cover hover:opacity-95 transition-opacity rounded-lg"
+            className={`object-cover hover:opacity-95 transition-opacity ${
+              isPostDetail ? "rounded-lg" : ""
+            }`}
           />
         </div>
       )}
@@ -40,7 +44,9 @@ export default function ImageDisplayView({
           {images.map((image, index) => (
             <div
               key={index}
-              className="relative flex-1 aspect-square rounded-lg overflow-hidden cursor-pointer"
+              className={`relative flex-1 aspect-square overflow-hidden cursor-pointer ${
+                isPostDetail ? "rounded-lg" : ""
+              }`}
             >
               <Image
                 src={image}
@@ -60,7 +66,11 @@ export default function ImageDisplayView({
           style={{ aspectRatio: "2/1" }}
           onClick={onImageClick}
         >
-          <div className="relative flex-1 rounded-lg overflow-hidden">
+          <div
+            className={`relative flex-1 overflow-hidden ${
+              isPostDetail ? "rounded-lg" : ""
+            }`}
+          >
             <Image
               src={images[0]}
               alt="Post image 1"
@@ -72,7 +82,9 @@ export default function ImageDisplayView({
             {images.slice(1).map((image, index) => (
               <div
                 key={index + 1}
-                className="relative flex-1 rounded-lg overflow-hidden"
+                className={`relative flex-1 overflow-hidden ${
+                  isPostDetail ? "rounded-lg" : ""
+                }`}
               >
                 <Image
                   src={image}
@@ -95,7 +107,9 @@ export default function ImageDisplayView({
           {images.map((image, index) => (
             <div
               key={index}
-              className="relative aspect-square rounded-lg overflow-hidden"
+              className={`relative aspect-square overflow-hidden ${
+                isPostDetail ? "rounded-lg" : ""
+              }`}
             >
               <Image
                 src={image}
@@ -115,7 +129,11 @@ export default function ImageDisplayView({
           style={{ aspectRatio: "2/1" }}
           onClick={onImageClick}
         >
-          <div className="relative flex-1 rounded-lg overflow-hidden">
+          <div
+            className={`relative flex-1 overflow-hidden ${
+              isPostDetail ? "rounded-lg" : ""
+            }`}
+          >
             <Image
               src={images[0]}
               alt="Post image 1"
@@ -127,7 +145,9 @@ export default function ImageDisplayView({
             {images.slice(1, 5).map((image, index) => (
               <div
                 key={index + 1}
-                className="relative aspect-square rounded-lg overflow-hidden"
+                className={`relative aspect-square overflow-hidden ${
+                  isPostDetail ? "rounded-lg" : ""
+                }`}
               >
                 <Image
                   src={image}

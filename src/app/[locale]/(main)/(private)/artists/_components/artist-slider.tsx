@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -47,21 +48,21 @@ const MOCK_DATA = [
 
 export default function ArtistSlider() {
   const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
+  // const [current, setCurrent] = React.useState(0);
+  // const [count, setCount] = React.useState(0);
+  const [activeArtist, setActiveArtist] = useState<string | null>(null);
+  // React.useEffect(() => {
+  //   if (!api) {
+  //     return;
+  //   }
 
-  React.useEffect(() => {
-    if (!api) {
-      return;
-    }
+  //   setCount(api.scrollSnapList().length);
+  //   setCurrent(api.selectedScrollSnap());
 
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap());
-
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
+  //   api.on("select", () => {
+  //     setCurrent(api.selectedScrollSnap());
+  //   });
+  // }, [api]);
 
   return (
     <Container maxWidth="xl" className="relative w-full py-6">
@@ -88,26 +89,29 @@ export default function ArtistSlider() {
             align: "start",
             loop: true,
           }}
-          className="w-full  rounded-2xl md:rounded-4xl"
+          className="w-full rounded-2xl md:rounded-4xl"
         >
           <CarouselContent className="-ml-4">
             {MOCK_DATA.map((artist, index) => (
               <CarouselItem
                 key={index}
-                className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/5"
+                onClick={() => setActiveArtist(artist.name)}
+                onMouseEnter={() => setActiveArtist(artist.name)}
+                onMouseLeave={() => setActiveArtist(null)}
+                className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/5 cursor-pointer"
               >
                 <ArtistCard
                   artistName={artist.name}
                   coverImageSrc={artist.coverSrc}
                   avatarSrc={artist.avatarSrc}
-                  isActive={index === current}
+                  isActive={activeArtist === artist.name}
                   variant="slider"
                 />
               </CarouselItem>
             ))}
           </CarouselContent>
 
-          <div className="flex justify-center mt-4 md:mt-8 space-x-2">
+          {/* <div className="flex justify-center mt-4 md:mt-8 space-x-2">
             {Array.from({ length: count }).map((_, index) => (
               <button
                 key={index}
@@ -120,7 +124,7 @@ export default function ArtistSlider() {
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
-          </div>
+          </div> */}
         </Carousel>
 
         {/* Right Arrow */}

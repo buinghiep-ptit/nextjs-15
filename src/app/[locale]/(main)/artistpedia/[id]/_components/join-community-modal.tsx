@@ -65,7 +65,7 @@ export default function JoinCommunityModal({
           {/* Profile Info Section */}
           <div className="flex flex-col gap-6 items-center w-full">
             {/* Avatar with Camera Button */}
-            <div className="w-[140px] h-[140px] rounded-full overflow-hidden">
+            <div className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[140px] md:h-[140px] rounded-full overflow-hidden">
               <Avatar className="w-full h-full">
                 <AvatarImage
                   src={avatarPreview}

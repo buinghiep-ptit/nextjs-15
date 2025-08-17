@@ -67,7 +67,7 @@ export default function PostInput({
       >
         <div
           className={`relative flex flex-row gap-3 items-center ${
-            isReply ? "h-9" : "h-18"
+            isReply ? "h-9" : "h-12 md:h-18"
           } px-4 bg-white rounded-[20px] hover:bg-gray-50 focus-within:bg-gray-50 transition-colors duration-300`}
         >
           <div className="flex flex-row gap-4 items-center">

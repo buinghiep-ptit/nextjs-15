@@ -16,7 +16,6 @@ export function ArtistCard({
   avatarSrc,
   isActive = false,
   variant = "grid",
-  onClick,
 }: ArtistCardProps) {
   const gradientBackground =
     "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #005 113.46%)";
@@ -26,19 +25,16 @@ export function ArtistCard({
   return (
     <div
       className={cn(
-        "relative bg-white rounded-2xl overflow-hidden group transition-all duration-300 ease-in-out",
-        isActive ? "shadow-lg" : "",
-        onClick ? "cursor-pointer" : ""
+        "relative bg-white rounded-2xl overflow-hidden group transition-all duration-300 ease-in-out"
       )}
       style={
         isActive
           ? {
-              padding: "2px",
-              background: gradientBackground,
+              // padding: "2px",
+              // background: gradientBackground,
             }
           : {}
       }
-      onClick={onClick}
     >
       <div
         className={cn(
@@ -89,9 +85,7 @@ export function ArtistCard({
             className={cn(
               "font-bold transition-colors duration-200",
               isSlider ? "text-sm" : "text-sm md:text-xl",
-              isActive
-                ? "text-transparent"
-                : "text-gray-800 group-hover:text-purple-600"
+              isActive ? "text-transparent" : "group-hover:text-purple-600"
             )}
             style={
               isActive

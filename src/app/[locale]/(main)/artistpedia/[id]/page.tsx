@@ -160,7 +160,7 @@ export default function ArtistProfile() {
         onSave={() => {}}
         initialData={{
           nickname: "",
-          avatar: "/images/info/avatar.jpg",
+          avatar: "/icons/profile-icon.svg",
         }}
       />
     </div>

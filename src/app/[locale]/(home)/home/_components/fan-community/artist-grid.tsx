@@ -1,9 +1,12 @@
+"use client";
+
 import { HStack, Stack } from "@/components/ui/layout";
 import { ArtistCard } from "@/components/ui/artist-card";
 import Image from "next/image";
 import { GradientText } from "@/components/ui/text-gradient";
 import { H1 } from "@/components/ui/typography";
 import { Container } from "@/components/ui/container";
+import { useState } from "react";
 
 export default function ArtistGrid() {
   const artists = [
@@ -70,6 +73,8 @@ export default function ArtistGrid() {
     },
   ];
 
+  const [activeArtist, setActiveArtist] = useState<string | null>(null);
+
   return (
     <div
       //   className="mt-8 md:mt-16"
@@ -100,13 +105,22 @@ export default function ArtistGrid() {
         </Stack>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-y-8">
           {artists.map((artist, index) => (
-            <ArtistCard
-              key={index}
-              artistName={artist.name}
-              coverImageSrc={artist.cover}
-              avatarSrc={artist.avatar}
-              variant="grid"
-            />
+            <button
+              key={artist.name}
+              onClick={() => setActiveArtist(artist.name)}
+              onMouseEnter={() => setActiveArtist(artist.name)}
+              onMouseLeave={() => setActiveArtist(null)}
+              className="flex-shrink-0 focus:outline-none group cursor-pointer"
+            >
+              <ArtistCard
+                key={index}
+                artistName={artist.name}
+                coverImageSrc={artist.cover}
+                avatarSrc={artist.avatar}
+                variant="grid"
+                isActive={activeArtist === artist.name}
+              />
+            </button>
           ))}
         </div>
       </Container>

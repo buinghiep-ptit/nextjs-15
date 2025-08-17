@@ -327,7 +327,7 @@ export default function SocialPostCard({
             onImageClick={!isPremium ? onImageClick : undefined}
           />
           {isPremium && (
-            <div className="absolute inset-0 backdrop-blur-md bg-[rgba(0, 0, 0, 0.50)] rounded-lg">
+            <div className="absolute inset-0 backdrop-blur-md bg-[rgba(0, 0, 0, 0.50)]">
               <div
                 className="flex items-center justify-center rounded-full w-9 h-9 m-4"
                 style={{
