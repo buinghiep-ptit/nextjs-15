@@ -1,13 +1,19 @@
+import { getImageWithFallback } from "@/lib/utils";
+
 interface SliderCardProps {
   imageSrc: string;
 }
 
 export default function SliderCard({ imageSrc }: SliderCardProps) {
+  // Ensure we have a valid image source
+  const safeImageSrc = typeof imageSrc === "string" ? imageSrc : "";
+  const validImageSrc = getImageWithFallback(safeImageSrc, "cover");
+
   return (
     <div
-      className={`relative flex-shrink-0 w-full aspect-[1.8/1] rounded-2xl md:rounded-4xl overflow-hidden  transition-all duration-300 ease-in-out`}
+      className={`relative flex-shrink-0 w-full aspect-[1.8/1] rounded-2xl md:rounded-4xl overflow-hidden transition-all duration-300 ease-in-out`}
       style={{
-        background: `url(${imageSrc}) no-repeat center center / cover`, // lightgray 50%
+        background: `url(${validImageSrc}) no-repeat center center / cover`,
       }}
     >
       {/* Gradient border for active state */}
