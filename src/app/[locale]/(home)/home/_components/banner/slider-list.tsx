@@ -18,6 +18,14 @@ export default function SliderList({ banners }: { banners: Banner[] }) {
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
 
+  // Validate banners data
+  const validBanners = React.useMemo(() => {
+    if (!Array.isArray(banners)) return [];
+    return banners.filter(
+      (banner) => banner && typeof banner === "object" && banner.id
+    );
+  }, [banners]);
+
   React.useEffect(() => {
     if (!api) {
       return;
@@ -30,6 +38,19 @@ export default function SliderList({ banners }: { banners: Banner[] }) {
       setCurrent(api.selectedScrollSnap());
     });
   }, [api]);
+
+  // Don't render if no valid banners
+  if (validBanners.length === 0) {
+    return (
+      <Container maxWidth="xl" className="relative w-full">
+        <div className="flex items-center justify-center py-16">
+          <div className="text-center text-gray-500">
+            <p>No banners available at the moment.</p>
+          </div>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="xl" className="relative w-full">
@@ -60,9 +81,9 @@ export default function SliderList({ banners }: { banners: Banner[] }) {
           className="w-full p-0 md:p-8 bg-white rounded-2xl md:rounded-4xl"
         >
           <CarouselContent className="-ml-4">
-            {banners.map((slide, index) => (
+            {validBanners.map((slide, index) => (
               <CarouselItem
-                key={index}
+                key={slide.id || index}
                 className="pl-4 md:basis-1/2 lg:basis-1/2"
               >
                 <SliderCard imageSrc={slide.imageUrl || ""} />
