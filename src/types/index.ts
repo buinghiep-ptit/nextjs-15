@@ -21,9 +21,26 @@ export interface User {
 }
 
 export interface PaginationParams {
+  pageable?: {
+    sort?: {
+      sorted?: boolean;
+      unsorted?: boolean;
+      empty?: boolean;
+    };
+    pageNumber?: number;
+    pageSize?: number;
+    offset?: number;
+    paged?: boolean;
+    unpaged?: boolean;
+  };
+  last?: boolean;
+  totalElements?: number;
+  totalPages?: number;
+  size?: number;
   page?: number;
-  limit?: number;
-  search?: string;
+  number?: number;
+  numberOfElements?: number;
+  first?: boolean;
 }
 
 export interface PaginatedResponse<T> {

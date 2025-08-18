@@ -6,6 +6,55 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Validates if a string is a valid HTTP/HTTPS URL
+ * @param url - The URL string to validate
+ * @returns true if the URL is valid, false otherwise
+ */
+export function isValidHttpUrl(url: string): boolean {
+  if (!url || typeof url !== "string") return false;
+  return url.startsWith("http://") || url.startsWith("https://");
+}
+
+/**
+ * Gets a valid image source URL or falls back to a default image
+ * @param src - The source URL to validate
+ * @param defaultSrc - The default image source to use if validation fails
+ * @returns The validated source URL or the default image source
+ */
+export function getValidImageSrc(src: string, defaultSrc: string): string {
+  if (!src || !isValidHttpUrl(src)) {
+    return defaultSrc;
+  }
+  return src;
+}
+
+/**
+ * Gets a valid image source URL with common fallback options
+ * @param src - The source URL to validate
+ * @param type - The type of image for appropriate fallback
+ * @returns The validated source URL or an appropriate fallback image
+ */
+export function getImageWithFallback(
+  src: string,
+  type: "avatar" | "cover" | "general" = "general"
+): string {
+  if (isValidHttpUrl(src)) {
+    return src;
+  }
+
+  // Return appropriate fallback based on image type
+  switch (type) {
+    case "avatar":
+      return "/icons/avatar-icon.svg";
+    case "cover":
+      return "/images/image_not_available.png";
+    case "general":
+    default:
+      return "/images/image_not_available.png";
+  }
+}
+
 export function formatDate(date: Date, locale: string = "en-US"): string {
   return new Intl.DateTimeFormat(locale, {
     year: "numeric",

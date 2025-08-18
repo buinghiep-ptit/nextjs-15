@@ -7,72 +7,13 @@ import { GradientText } from "@/components/ui/text-gradient";
 import { H1 } from "@/components/ui/typography";
 import { Container } from "@/components/ui/container";
 import { useState } from "react";
+import { Community } from "@/types/community.type";
 
-export default function ArtistGrid() {
-  const artists = [
-    {
-      name: "Đen Vâu",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "BINZ",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "SƠN TÙNG M-TP",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-      badge: "T Artist Name",
-    },
-    {
-      name: "MONSTAR",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "HIEUTHUHAI",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "Dương Domic",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "TaynguyenSound",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "Jack",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "Mòa Minzy",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "Vũ.",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "Tùng Dương",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-    {
-      name: "Hoàng Thùy Linh",
-      cover: "/images/home/trending/artist-bg.png",
-      avatar: "/images/home/trending/artist-avatar.png",
-    },
-  ];
-
+export default function ArtistGrid({
+  communities,
+}: {
+  communities: Community[];
+}) {
   const [activeArtist, setActiveArtist] = useState<string | null>(null);
 
   return (
@@ -104,21 +45,20 @@ export default function ArtistGrid() {
           </H1>
         </Stack>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-y-8">
-          {artists.map((artist, index) => (
+          {communities.map((artist) => (
             <button
-              key={artist.name}
-              onClick={() => setActiveArtist(artist.name)}
-              onMouseEnter={() => setActiveArtist(artist.name)}
+              key={artist.id}
+              onClick={() => setActiveArtist(artist.id || "")}
+              onMouseEnter={() => setActiveArtist(artist.id || "")}
               onMouseLeave={() => setActiveArtist(null)}
               className="flex-shrink-0 focus:outline-none group cursor-pointer"
             >
               <ArtistCard
-                key={index}
-                artistName={artist.name}
-                coverImageSrc={artist.cover}
-                avatarSrc={artist.avatar}
+                artistName={artist.communityName || ""}
+                coverImageSrc={artist.coverUrl || ""}
+                avatarSrc={artist.imageUrl || ""}
                 variant="grid"
-                isActive={activeArtist === artist.name}
+                isActive={activeArtist === artist.id}
               />
             </button>
           ))}
