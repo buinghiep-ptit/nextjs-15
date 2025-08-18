@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn, getImageWithFallback } from "@/lib/utils";
 
 interface ArtistCardProps {
   artistName: string;
@@ -42,9 +42,9 @@ export function ArtistCard({
         )}
       >
         {/* Main Cover Image */}
-        <div className="relative w-full aspect-[1/1] overflow-hidden">
+        <div className="relative w-full aspect-[11/7] overflow-hidden">
           <Image
-            src={coverImageSrc || "/placeholder.svg"}
+            src={getImageWithFallback(coverImageSrc, "cover")}
             alt={`Cover image for ${artistName}`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -73,7 +73,7 @@ export function ArtistCard({
               )}
             >
               <Image
-                src={avatarSrc || "/placeholder.svg"}
+                src={getImageWithFallback(avatarSrc, "avatar")}
                 alt={`Avatar of ${artistName}`}
                 fill
                 sizes={isSlider ? "48px" : "(max-width: 768px) 48px, 64px"}
