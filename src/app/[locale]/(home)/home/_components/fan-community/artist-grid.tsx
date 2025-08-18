@@ -16,9 +16,14 @@ export default function ArtistGrid({
 }) {
   const [activeArtist, setActiveArtist] = useState<string | null>(null);
 
+  // Validate communities data
+  const validCommunities =
+    communities?.filter(
+      (community) => community && typeof community === "object" && community.id
+    ) || [];
+
   return (
     <div
-      //   className="mt-8 md:mt-16"
       style={{
         background: `url("/images/home/trending/trending-bg.png")`,
         backgroundSize: "cover",
@@ -44,25 +49,32 @@ export default function ArtistGrid({
             Fan Community
           </H1>
         </Stack>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-y-8">
-          {communities.map((artist) => (
-            <button
-              key={artist.id}
-              onClick={() => setActiveArtist(artist.id || "")}
-              onMouseEnter={() => setActiveArtist(artist.id || "")}
-              onMouseLeave={() => setActiveArtist(null)}
-              className="flex-shrink-0 focus:outline-none group cursor-pointer"
-            >
-              <ArtistCard
-                artistName={artist.communityName || ""}
-                coverImageSrc={artist.coverUrl || ""}
-                avatarSrc={artist.imageUrl || ""}
-                variant="grid"
-                isActive={activeArtist === artist.id}
-              />
-            </button>
-          ))}
-        </div>
+
+        {validCommunities.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-x-4 gap-y-4 md:gap-y-8">
+            {validCommunities.map((artist) => (
+              <button
+                key={artist.id}
+                onClick={() => setActiveArtist(artist.id || "")}
+                onMouseEnter={() => setActiveArtist(artist.id || "")}
+                onMouseLeave={() => setActiveArtist(null)}
+                className="flex-shrink-0 focus:outline-none group cursor-pointer"
+              >
+                <ArtistCard
+                  artistName={artist.communityName || "Unknown Community"}
+                  coverImageSrc={artist.coverUrl || ""}
+                  avatarSrc={artist.imageUrl || ""}
+                  variant="grid"
+                  isActive={activeArtist === artist.id}
+                />
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-gray-500">
+            <p>No communities available at the moment.</p>
+          </div>
+        )}
       </Container>
     </div>
   );

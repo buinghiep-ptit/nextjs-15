@@ -34,6 +34,11 @@ const request = async <Response>(
       ? process.env.NEXT_PUBLIC_API_URL
       : options.baseUrl;
 
+  // Validate base URL
+  if (!baseUrl) {
+    throw new Error("API base URL is not configured");
+  }
+
   const fullUrl = url?.startsWith("/")
     ? `${baseUrl}${url}`
     : `${baseUrl}/${url}`;
@@ -73,19 +78,35 @@ const request = async <Response>(
     };
   }
 
-  const res = await fetch(fullUrl, fetchOptions);
+  try {
+    // Add timeout for production
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-  const payload: Response = await res.json();
-  const data = {
-    status: res.status,
-    payload,
-  };
+    const res = await fetch(fullUrl, {
+      ...fetchOptions,
+      signal: controller.signal,
+    });
 
-  if (!res.ok) {
-    throw new HttpError(data);
+    clearTimeout(timeoutId);
+
+    const payload: Response = await res.json();
+    const data = {
+      status: res.status,
+      payload,
+    };
+
+    if (!res.ok) {
+      throw new HttpError(data);
+    }
+
+    return data;
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(`Request timeout for ${fullUrl}`);
+    }
+    throw error;
   }
-
-  return data;
 };
 
 // Cached version of request for server-side caching

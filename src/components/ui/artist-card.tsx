@@ -22,6 +22,13 @@ export function ArtistCard({
 
   const isSlider = variant === "slider";
 
+  // Ensure we have valid strings for image sources
+  const safeCoverImageSrc =
+    typeof coverImageSrc === "string" ? coverImageSrc : "";
+  const safeAvatarSrc = typeof avatarSrc === "string" ? avatarSrc : "";
+  const safeArtistName =
+    typeof artistName === "string" ? artistName : "Unknown Artist";
+
   return (
     <div
       className={cn(
@@ -44,8 +51,8 @@ export function ArtistCard({
         {/* Main Cover Image */}
         <div className="relative w-full aspect-[11/7] overflow-hidden">
           <Image
-            src={getImageWithFallback(coverImageSrc, "cover")}
-            alt={`Cover image for ${artistName}`}
+            src={getImageWithFallback(safeCoverImageSrc, "cover")}
+            alt={`Cover image for ${safeArtistName}`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             style={{ objectFit: "cover" }}
@@ -73,8 +80,8 @@ export function ArtistCard({
               )}
             >
               <Image
-                src={getImageWithFallback(avatarSrc, "avatar")}
-                alt={`Avatar of ${artistName}`}
+                src={getImageWithFallback(safeAvatarSrc, "avatar")}
+                alt={`Avatar of ${safeArtistName}`}
                 fill
                 sizes={isSlider ? "48px" : "(max-width: 768px) 48px, 64px"}
                 style={{ objectFit: "cover" }}
@@ -97,7 +104,7 @@ export function ArtistCard({
                 : {}
             }
           >
-            {artistName}
+            {safeArtistName}
           </h3>
         </div>
       </div>
