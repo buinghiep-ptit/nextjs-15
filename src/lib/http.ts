@@ -28,7 +28,7 @@ const request = async <Response>(
     "Content-Type": "application/json",
   };
 
-  const baseUrl = "http://fan-api-dev.fpt.net";
+  const baseUrl = "https://dev-api.fstats.ai/fbs/api/public";
 
   // Validate base URL
   if (!baseUrl) {

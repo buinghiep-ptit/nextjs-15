@@ -5,6 +5,7 @@ import SocialFeedExample from "./_components/post";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import FanCommunity from "./_components/fan-community";
+import Demo from "./_components/demo";
 
 export async function generateMetadata({
   params,
@@ -39,6 +40,7 @@ export default function HomePage() {
         <FanCommunity />
       </div>
       <SocialFeedExample />
+      <Demo />
     </>
   );
 }

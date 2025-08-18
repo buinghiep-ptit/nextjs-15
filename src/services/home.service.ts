@@ -3,6 +3,10 @@ import { BannerResponse } from "@/types/banner.type";
 import { CommunityResponse } from "@/types/community.type";
 
 export const homeApiRequest = {
+  getDemo: async () => {
+    return await httpCached.get(`/homePage/recentMatches`);
+  },
+
   getBanners: async (page: number, size: number) => {
     try {
       return await httpCached.get<BannerResponse>(
