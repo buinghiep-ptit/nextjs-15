@@ -12,7 +12,7 @@ import { useArtist } from "@/providers/artist-provider";
 import { useRouter, usePathname } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Community } from "@/types/community.type";
-import { useListCommunities } from "@/hooks/queries/use-community";
+import { useListPublicCommunities } from "@/hooks/queries/use-community";
 
 export default function ArtistDropdown() {
   const { currentArtist, setCurrentArtist, generateArtistSlug } = useArtist();
@@ -21,7 +21,7 @@ export default function ArtistDropdown() {
   const pathname = usePathname();
 
   // Fetch artists from API
-  const { data: artists, isLoading } = useListCommunities();
+  const { data: artists, isLoading } = useListPublicCommunities();
 
   // Sync currentArtist with URL on mount and pathname change
   useEffect(() => {

@@ -57,7 +57,7 @@ if (process.env.NODE_ENV === "development") {
       return response;
     },
     (error) => {
-      console.error(`❌ ${error.response?.status} ${error.config?.url}`);
+      console.log(`❌ ${error.response?.status} ${error.config?.url}`);
       return Promise.reject(error);
     }
   );

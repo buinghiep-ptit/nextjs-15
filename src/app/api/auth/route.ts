@@ -1,8 +1,4 @@
-import {
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY,
-  SESSION_TIMEOUT,
-} from "@/constants";
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from "@/constants";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -19,7 +15,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const expiresDate = new Date(Date.now() + expiresIn * 1000).toUTCString();
+  const expiresDate = new Date(Date.now() + expiresIn * 30).toUTCString();
 
   const headers = new Headers();
   headers.append(
@@ -28,7 +24,7 @@ export async function POST(request: Request) {
   );
   headers.append(
     "Set-Cookie",
-    `${REFRESH_TOKEN_KEY}=${refreshToken}; Path=/; HttpOnly; Max-Age=${SESSION_TIMEOUT}; SameSite=Lax; Secure`
+    `${REFRESH_TOKEN_KEY}=${refreshToken}; Path=/; HttpOnly; Expires=${expiresDate}; SameSite=Lax; Secure`
   );
 
   return Response.json(body, {

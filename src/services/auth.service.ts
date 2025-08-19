@@ -32,7 +32,7 @@ export async function getOauthURL() {
 export async function validateCode(payload: {
   code: string;
   state: string;
-  device_id: string;
+  deviceId: string;
   rememberMe: true;
 }) {
   const response = await axiosInstance.post(

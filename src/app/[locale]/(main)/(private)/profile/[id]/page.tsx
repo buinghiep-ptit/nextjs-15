@@ -1,13 +1,16 @@
 "use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Container } from "@/components/ui/container";
-import React, { useEffect } from "react";
+import React from "react";
 import ProfileInfo from "@/components/profile/profile-info";
 import EditProfileButton from "@/components/profile/edit-profile-button";
 import ProfileMoreMenu from "@/components/profile/profile-more-menu";
 import ProfilePostsList from "@/components/profile/profile-posts-list";
 import EditProfileModal from "@/components/profile/edit-profile-modal";
-import { getMe } from "@/services/auth.service";
+import { useQuery } from "@tanstack/react-query";
+import { customerApiRequest } from "@/services/customer.service";
+import { getImageWithFallback } from "@/lib/utils";
 
 export default function ProfilePage() {
   // Mock data - in real app, this would come from props/API
@@ -16,6 +19,13 @@ export default function ProfilePage() {
   const isOwnProfile = currentUserId === profileUserId;
 
   const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+
+  const { data: customerInfo } = useQuery({
+    queryKey: ["customer-info"],
+    queryFn: () => customerApiRequest.getCustomerInfo(),
+  });
+
+  console.log("customerInfo", customerInfo);
 
   const author = {
     id: "user123",
@@ -28,12 +38,6 @@ export default function ProfilePage() {
       "Singer 🥳 Music Creator 💖 Live Show Addict 🤗 🌈\n1M+ views trên TikTok 🔥 Collab với 10k+ người hâm mộ 🥰😘",
     birthday: "Mar 01, 1997",
   };
-
-  useEffect(() => {
-    getMe().then((res) => {
-      console.log("res", res);
-    });
-  }, []);
 
   const handleEditProfile = () => {
     setIsEditModalOpen(true);
@@ -74,37 +78,24 @@ export default function ProfilePage() {
           <div className="flex flex-col lg:flex-row items-center lg:items-center gap-6 sm:gap-8 md:gap-10 lg:gap-12">
             {/* Avatar Section */}
             <div className="flex-shrink-0">
-              {author.isKOL ? (
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #0052D4 113.46%)",
-                  }}
-                  className="w-32 h-40 sm:w-36 sm:h-44 md:w-40 md:h-48 lg:w-45 lg:h-55 p-1.5 sm:p-2 rounded-tl-[80px] rounded-tr-[80px] sm:rounded-tl-[100px] sm:rounded-tr-[100px] rounded-bl-lg rounded-br-lg sm:rounded-bl-xl sm:rounded-br-xl flex items-center justify-center overflow-hidden"
-                >
-                  <Avatar className="w-full h-full rounded-tl-[75px] rounded-tr-[75px] sm:rounded-tl-[100px] sm:rounded-tr-[100px] rounded-bl-lg rounded-br-lg">
-                    <AvatarImage
-                      src={author.avatar}
-                      alt={author.name}
-                      className="object-cover"
-                    />
-                    <AvatarFallback>{author.name[0]}</AvatarFallback>
-                  </Avatar>
-                </div>
-              ) : (
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #0052D4 113.46%)",
-                  }}
-                  className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-45 lg:h-45 p-1.5 sm:p-2 rounded-full flex items-center justify-center"
-                >
-                  <Avatar className="w-full h-full bg-white">
-                    <AvatarImage src={author.avatar} alt={author.name} />
-                    <AvatarFallback>{author.name[0]}</AvatarFallback>
-                  </Avatar>
-                </div>
-              )}
+              <div
+                style={{
+                  background:
+                    "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #0052D4 113.46%)",
+                }}
+                className="w-32 h-40 sm:w-36 sm:h-44 md:w-40 md:h-48 lg:w-45 lg:h-55 p-1.5 sm:p-2 rounded-tl-[80px] rounded-tr-[80px] sm:rounded-tl-[100px] sm:rounded-tr-[100px] rounded-bl-lg rounded-br-lg sm:rounded-bl-xl sm:rounded-br-xl flex items-center justify-center overflow-hidden"
+              >
+                <Avatar className="w-full h-full rounded-tl-[75px] bg-white rounded-tr-[75px] sm:rounded-tl-[100px] sm:rounded-tr-[100px] rounded-bl-lg rounded-br-lg">
+                  <AvatarImage
+                    src={getImageWithFallback("", "cover")}
+                    alt={customerInfo?.content?.fullName}
+                    className="object-cover"
+                  />
+                  <AvatarFallback>
+                    {customerInfo?.content?.fullName?.[0]}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
             </div>
 
             {/* Profile Info Section */}

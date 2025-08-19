@@ -12,9 +12,12 @@ import {
 import Image from "next/image";
 import { Container } from "@/components/ui/container";
 import { useAuthContext } from "@/providers/auth-provider";
+import { useListMyCommunities } from "@/hooks/queries/use-community";
 
 export default function CommunityGrid() {
   const { sessionToken } = useAuthContext();
+
+  const { data } = useListMyCommunities(0, 20);
 
   const [api, setApi] = React.useState<CarouselApi>();
   const [activeCommunity, setActiveCommunity] = React.useState<string | null>(
@@ -59,7 +62,7 @@ export default function CommunityGrid() {
     },
   ];
 
-  if (!sessionToken) {
+  if (!sessionToken || !data?.content?.length) {
     return <div className="md:my-16 my-6"></div>;
   }
 

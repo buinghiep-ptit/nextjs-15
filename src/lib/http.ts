@@ -196,7 +196,9 @@ export const cacheUtils = {
   // Common cache tags
   tags: {
     banners: "banners",
-    communities: "communities",
+    publicCommunities: "publicCommunities",
+    privateCommunities: "privateCommunities",
+    communityPedia: "communityPedia",
     users: "users",
     posts: "posts",
     comments: "comments",
@@ -238,58 +240,58 @@ export const httpPresets = {
 };
 
 // Example usage helpers
-export const apiClient = {
-  // User-related APIs
-  users: {
-    getProfile: (id: string) =>
-      httpCached.get(`/users/${id}`, {
-        tags: [cacheUtils.tags.users, `user-${id}`],
-        revalidate: 1800, // 30 minutes
-      }),
+// export const apiClient = {
+//   // User-related APIs
+//   users: {
+//     getProfile: (id: string) =>
+//       httpCached.get(`/users/${id}`, {
+//         tags: [cacheUtils.tags.users, `user-${id}`],
+//         revalidate: 1800, // 30 minutes
+//       }),
 
-    updateProfile: (id: string, data: any) =>
-      http.put(`/users/${id}`, data).then(async (result) => {
-        // Revalidate related caches after update
-        await cacheUtils.revalidateTag(`user-${id}`);
-        await cacheUtils.revalidateTag(cacheUtils.tags.users);
-        return result;
-      }),
-  },
+//     updateProfile: (id: string, data: any) =>
+//       http.put(`/users/${id}`, data).then(async (result) => {
+//         // Revalidate related caches after update
+//         await cacheUtils.revalidateTag(`user-${id}`);
+//         await cacheUtils.revalidateTag(cacheUtils.tags.users);
+//         return result;
+//       }),
+//   },
 
-  // Posts-related APIs
-  posts: {
-    getList: (page = 1) =>
-      httpCached.get(`/posts?page=${page}`, {
-        tags: [cacheUtils.tags.posts, `posts-page-${page}`],
-        revalidate: 600, // 10 minutes
-      }),
+//   // Posts-related APIs
+//   posts: {
+//     getList: (page = 1) =>
+//       httpCached.get(`/posts?page=${page}`, {
+//         tags: [cacheUtils.tags.posts, `posts-page-${page}`],
+//         revalidate: 600, // 10 minutes
+//       }),
 
-    getDetail: (id: string) =>
-      httpCached.get(`/posts/${id}`, {
-        tags: [cacheUtils.tags.posts, `post-${id}`],
-        revalidate: 300, // 5 minutes
-      }),
+//     getDetail: (id: string) =>
+//       httpCached.get(`/posts/${id}`, {
+//         tags: [cacheUtils.tags.posts, `post-${id}`],
+//         revalidate: 300, // 5 minutes
+//       }),
 
-    create: (data: any) =>
-      http.post("/posts", data).then(async (result) => {
-        await cacheUtils.revalidateTag(cacheUtils.tags.posts);
-        return result;
-      }),
+//     create: (data: any) =>
+//       http.post("/posts", data).then(async (result) => {
+//         await cacheUtils.revalidateTag(cacheUtils.tags.posts);
+//         return result;
+//       }),
 
-    update: (id: string, data: any) =>
-      http.put(`/posts/${id}`, data).then(async (result) => {
-        await cacheUtils.revalidateTag(`post-${id}`);
-        await cacheUtils.revalidateTag(cacheUtils.tags.posts);
-        return result;
-      }),
+//     update: (id: string, data: any) =>
+//       http.put(`/posts/${id}`, data).then(async (result) => {
+//         await cacheUtils.revalidateTag(`post-${id}`);
+//         await cacheUtils.revalidateTag(cacheUtils.tags.posts);
+//         return result;
+//       }),
 
-    delete: (id: string) =>
-      http.delete(`/posts/${id}`).then(async (result) => {
-        await cacheUtils.revalidateTag(`post-${id}`);
-        await cacheUtils.revalidateTag(cacheUtils.tags.posts);
-        return result;
-      }),
-  },
-};
+//     delete: (id: string) =>
+//       http.delete(`/posts/${id}`).then(async (result) => {
+//         await cacheUtils.revalidateTag(`post-${id}`);
+//         await cacheUtils.revalidateTag(cacheUtils.tags.posts);
+//         return result;
+//       }),
+//   },
+// };
 
 export default http;

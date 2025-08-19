@@ -9,7 +9,7 @@ import {
 } from "@/constants";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
-const privatePaths = ["/community", "/profile", "/media"];
+const privatePaths = ["/community", "/profile", "/media", "/artists"];
 const authPaths = ["/login", "/register"];
 
 const matchPath = (pathname: string, paths: string[]): boolean => {

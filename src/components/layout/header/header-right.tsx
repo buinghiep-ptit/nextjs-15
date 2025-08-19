@@ -1,41 +1,40 @@
 "use client";
 
-import { login } from "@/services/auth.service";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/ui/button-gradient";
 import { useAuthContext } from "@/providers/auth-provider";
+import { getOauthURL } from "@/services/auth.service";
 import Image from "next/image";
-import { redirect, useSearchParams } from "next/navigation";
-import { SESSION_TIMEOUT } from "@/constants";
 import Link from "next/link";
 
 export default function HeaderRight() {
-  const { sessionToken, setSessionToken } = useAuthContext();
+  const { sessionToken } = useAuthContext();
   const isAuthenticated = !!sessionToken;
-  const callbackUrl = useSearchParams().get("callbackUrl");
 
-  const handleLogin = async () => {
-    const data = await login({
-      idAddress: "admin.doe@example.com",
-      password: "password123",
-    });
+  // Simple function to replace production domain with localhost:3000
+  const replaceDomain = (url: string) => {
+    return url.replace(
+      /redirect_uri=http%3A%2F%2Ffan-dev\.fpt\.net%2Fauth/g,
+      "redirect_uri=http%3A%2F%2Flocalhost%3A9000%2Fauth"
+    );
+  };
 
-    const response = await fetch("/api/auth", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        accessToken: data.access_token,
-        refreshToken: data.refresh_token,
-        expiresIn: SESSION_TIMEOUT,
-      }),
-    });
+  const handleOauthLogin = async () => {
+    try {
+      const data = await getOauthURL();
 
-    if (response.ok) {
-      const { accessToken } = await response.json();
-      setSessionToken(accessToken);
-      redirect(callbackUrl || "/home");
+      if (data?.content?.url) {
+        // Replace production domain with localhost:3000
+        const modifiedUrl =
+          process.env.NODE_ENV === "development"
+            ? replaceDomain(data.content.url)
+            : data.content.url;
+
+        // Redirect to OAuth provider
+        window.location.href = modifiedUrl;
+      }
+    } catch (error) {
+      console.error("Failed to get OAuth URL:", error);
     }
   };
 
@@ -69,7 +68,7 @@ export default function HeaderRight() {
             ></span>
             <span className="sr-only">Notifications</span>
           </Button>
-          <Link href="/profile/1">
+          <Link href="/profile/me">
             <Button variant="ghost" size="icon">
               <Image
                 src="/icons/user-icon.svg"
@@ -84,7 +83,7 @@ export default function HeaderRight() {
       ) : (
         <ButtonGradient
           className="h-[44px] font-semibold text-white text-[13px]"
-          onClick={handleLogin}
+          onClick={handleOauthLogin}
         >
           Đăng nhập
         </ButtonGradient>

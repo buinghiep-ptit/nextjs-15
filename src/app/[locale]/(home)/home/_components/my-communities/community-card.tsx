@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn, getImageWithFallback } from "@/lib/utils";
 
 interface CommunityCardProps {
   name: string;
@@ -51,22 +50,18 @@ export function CommunityCard({
             "relative md:w-24 md:h-24 w-20 h-20 overflow-hidden flex items-center justify-center bg-white"
           )}
         >
-          <Image
-            src={avatarSrc || "/placeholder.svg"}
+          <img
+            src={getImageWithFallback(avatarSrc, "cover")}
             alt={`Avatar of ${name}`}
-            fill
-            sizes="96px"
             style={{ objectFit: "cover" }}
-            className="rounded-full"
+            className="rounded-full w-full h-full"
           />
           {badgeSrc && (
             <div className="absolute bottom-0 right-0 md:w-8 md:h-8 w-6 h-6 rounded-full bg-black border-2 border-white flex items-center justify-center">
-              <Image
-                src={badgeSrc || "/placeholder.svg"}
+              <img
+                src={getImageWithFallback(badgeSrc, "avatar")}
                 alt="Badge"
-                fill
-                sizes="32px"
-                className="object-cover rounded-full"
+                className="object-cover rounded-full w-full h-full"
               />
             </div>
           )}

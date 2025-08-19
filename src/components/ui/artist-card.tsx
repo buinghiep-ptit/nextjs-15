@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { cn, getImageWithFallback } from "@/lib/utils";
 import Link from "next/link";
 
@@ -25,6 +24,13 @@ export function ArtistCard({
 
   const isSlider = variant === "slider";
 
+  // Ensure we have valid strings for image sources
+  const safeCoverImageSrc =
+    typeof coverImageSrc === "string" ? coverImageSrc : "";
+  const safeAvatarSrc = typeof avatarSrc === "string" ? avatarSrc : "";
+  const safeArtistName =
+    typeof artistName === "string" ? artistName : "Unknown Artist";
+
   return (
     <div
       className={cn(
@@ -47,17 +53,13 @@ export function ArtistCard({
         {/* Main Cover Image */}
         <Link href={`/artistpedia/${slugName}`}>
           <div className="relative w-full aspect-[11/7] overflow-hidden">
-            <Image
-              src={getImageWithFallback(coverImageSrc, "cover")}
-              alt={`Cover image for ${artistName}`}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              style={{ objectFit: "cover" }}
-              className="transition-transform duration-300 group-hover:scale-105"
+            <img
+              src={getImageWithFallback(safeCoverImageSrc, "cover")}
+              alt={`Cover image for ${safeArtistName}`}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         </Link>
-
         {/* Artist Name and Avatar */}
         <div
           className={cn(
@@ -77,12 +79,10 @@ export function ArtistCard({
                 isSlider ? "w-12 h-12" : "w-12 h-12 md:w-16 md:h-16"
               )}
             >
-              <Image
-                src={getImageWithFallback(avatarSrc, "avatar")}
-                alt={`Avatar of ${artistName}`}
-                fill
-                sizes={isSlider ? "48px" : "(max-width: 768px) 48px, 64px"}
-                style={{ objectFit: "cover" }}
+              <img
+                src={getImageWithFallback(safeAvatarSrc, "avatar")}
+                alt={`Avatar of ${safeArtistName}`}
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
@@ -102,7 +102,7 @@ export function ArtistCard({
                 : {}
             }
           >
-            {artistName}
+            {safeArtistName}
           </h3>
         </div>
       </div>

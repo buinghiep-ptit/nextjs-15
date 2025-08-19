@@ -9,11 +9,18 @@ import { H4 } from "@/components/ui/typography";
 interface EditProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: { nickname: string; avatar?: File }) => void;
+  onSave: (data: {
+    userName: string;
+    avartarImgUrl?: string;
+    communityHashedId: string;
+  }) => void;
   initialData: {
-    nickname: string;
+    userName: string;
     avatar: string;
+    communityHashedId: string;
+    communityName: string;
   };
+  isLoading: boolean;
 }
 
 export default function JoinCommunityModal({
@@ -21,22 +28,24 @@ export default function JoinCommunityModal({
   onClose,
   onSave,
   initialData,
+  isLoading,
 }: EditProfileModalProps) {
-  const [nickname, setNickname] = useState(initialData.nickname);
+  const [userName, setUserName] = useState(initialData.userName);
   const [avatarPreview] = useState(initialData.avatar);
 
-  const maxNicknameLength = 20;
+  const maxNicknameLength = 100;
 
   const handleSave = () => {
     onSave({
-      nickname,
+      userName: userName,
+      communityHashedId: initialData.communityHashedId,
+      avartarImgUrl: initialData.avatar ?? "",
     });
-    onClose();
   };
 
   const handleClose = () => {
     // Reset form data when closing
-    setNickname(initialData.nickname);
+    setUserName(initialData.userName);
 
     onClose();
   };
@@ -73,7 +82,7 @@ export default function JoinCommunityModal({
                   className="object-cover"
                 />
                 <AvatarFallback className="text-2xl bg-gray-200">
-                  {nickname.charAt(0).toUpperCase()}
+                  {userName.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </div>
@@ -96,7 +105,7 @@ export default function JoinCommunityModal({
                   }}
                 >
                   <span className=" font-bold leading-[24px] text-transparent">
-                    Hoàng Thùy Linh Fanverse
+                    {initialData.communityName}
                   </span>
                 </div>
               </div>
@@ -111,20 +120,20 @@ export default function JoinCommunityModal({
                     Nhập biệt danh của bạn để tiếp tục!
                   </label>
                   <span className="text-[#868E96] text-[14px] leading-[20px]">
-                    {nickname.length}/{maxNicknameLength}
+                    {userName.length}/{maxNicknameLength}
                   </span>
                 </div>
                 <div className="bg-[#F1F3F5] rounded-xl p-4 w-full">
                   <input
                     type="text"
-                    value={nickname}
+                    value={userName}
                     onChange={(e) => {
                       if (e.target.value.length <= maxNicknameLength) {
-                        setNickname(e.target.value);
+                        setUserName(e.target.value);
                       }
                     }}
                     className="w-full bg-transparent text-[#212529] text-[15px] font-semibold leading-[20px] outline-none placeholder-[#868E96]"
-                    placeholder="Nhập nickname của bạn"
+                    placeholder="Nhập biệt danh của bạn"
                   />
                 </div>
               </div>
@@ -136,8 +145,9 @@ export default function JoinCommunityModal({
             <ButtonGradient
               onClick={handleSave}
               className="h-12 w-full font-bold text-white text-[15px]"
+              disabled={!userName || isLoading}
             >
-              Đăng ký ngay
+              {isLoading ? "Đang gửi..." : "Đăng ký ngay"}
             </ButtonGradient>
           </div>
         </div>
