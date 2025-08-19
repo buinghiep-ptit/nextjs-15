@@ -1,19 +1,13 @@
 "use client";
 
+import { slugify } from "@/lib/utils";
+import { Community } from "@/types/community.type";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-interface Artist {
-  id: string;
-  name: string;
-  avatar: string;
-  isVerified: boolean;
-  followerCount: string;
-}
-
 interface ArtistContextType {
-  currentArtist: Artist | null;
-  setCurrentArtist: (artist: Artist) => void;
-  generateArtistSlug: (artist: Artist) => string;
+  currentArtist: Community | null;
+  setCurrentArtist: (artist: Community) => void;
+  generateArtistSlug: (artist: Community) => string;
 }
 
 const ArtistContext = createContext<ArtistContextType | undefined>(undefined);
@@ -23,18 +17,11 @@ interface ArtistProviderProps {
 }
 
 export function ArtistProvider({ children }: ArtistProviderProps) {
-  const [currentArtist, setCurrentArtist] = useState<Artist | null>(null);
+  const [currentArtist, setCurrentArtist] = useState<Community | null>(null);
 
   // Generate URL slug from artist name + id
-  const generateArtistSlug = (artist: Artist): string => {
-    const nameSlug = artist.name
-      .toLowerCase()
-      .replace(/\s+/g, "-") // Replace spaces with hyphens
-      .replace(/[^\w-]/g, "") // Remove special characters except hyphens
-      .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
-      .trim();
-
-    return `${nameSlug}-${artist.id}`;
+  const generateArtistSlug = (artist: Community): string => {
+    return slugify(artist?.communityName ?? "", artist.id);
   };
 
   const value: ArtistContextType = {

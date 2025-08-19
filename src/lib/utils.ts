@@ -63,15 +63,17 @@ export function formatDate(date: Date, locale: string = "en-US"): string {
   }).format(date);
 }
 
-export function slugify(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
+export function slugify(text: string, id?: string): string {
+  return (
+    text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+/, "")
+      .replace(/-+$/, "") + (id ? `-${id}` : "")
+  );
 }
 
 export function debounce<T extends (...args: unknown[]) => unknown>(

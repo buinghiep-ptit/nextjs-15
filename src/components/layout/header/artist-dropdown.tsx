@@ -11,46 +11,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useArtist } from "@/providers/artist-provider";
 import { useRouter, usePathname } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface Artist {
-  id: string;
-  name: string;
-  avatar: string;
-  isVerified: boolean;
-  followerCount: string;
-}
+import { Community } from "@/types/community.type";
+import { useListCommunities } from "@/hooks/queries/use-community";
 
 export default function ArtistDropdown() {
   const { currentArtist, setCurrentArtist, generateArtistSlug } = useArtist();
   const [isOpen, setIsOpen] = useState(false);
-  const [artists, setArtists] = useState<Artist[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
   // Fetch artists from API
-  useEffect(() => {
-    const fetchArtists = async () => {
-      try {
-        const response = await fetch("/api/artists");
-        const result = await response.json();
-
-        if (result.success) {
-          setArtists(result.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch artists:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchArtists();
-  }, []);
+  const { data: artists, isLoading } = useListCommunities();
 
   // Sync currentArtist with URL on mount and pathname change
   useEffect(() => {
-    if (!currentArtist || artists.length === 0) return;
+    if (!currentArtist || artists?.content?.length === 0) return;
 
     // Check if we're on a page that has artist ID in URL
     if (
@@ -62,7 +37,7 @@ export default function ArtistDropdown() {
       const artistIdFromUrl = pathname.split("/").pop();
 
       // Find artist by ID from URL
-      const artistFromUrl = artists.find((artist) => {
+      const artistFromUrl = artists?.content?.find((artist) => {
         const slug = generateArtistSlug(artist);
         return slug === artistIdFromUrl;
       });
@@ -76,7 +51,7 @@ export default function ArtistDropdown() {
 
   // Set current artist from URL if not set yet
   useEffect(() => {
-    if (currentArtist || artists.length === 0) return;
+    if (currentArtist || artists?.content?.length === 0) return;
 
     // Check if we're on a page that has artist ID in URL
     if (
@@ -88,7 +63,7 @@ export default function ArtistDropdown() {
       const artistIdFromUrl = pathname.split("/").pop();
 
       // Find artist by ID from URL
-      const artistFromUrl = artists.find((artist) => {
+      const artistFromUrl = artists?.content?.find((artist) => {
         const slug = generateArtistSlug(artist);
         return slug === artistIdFromUrl;
       });
@@ -101,12 +76,12 @@ export default function ArtistDropdown() {
     }
 
     // If no artist found from URL and no current artist, set the first one
-    if (artists.length > 0) {
-      setCurrentArtist(artists[0]);
+    if (artists?.content?.length && artists?.content?.length > 0) {
+      setCurrentArtist(artists?.content?.[0] ?? null);
     }
   }, [pathname, currentArtist, setCurrentArtist, generateArtistSlug, artists]);
 
-  const handleArtistSelect = (artist: Artist) => {
+  const handleArtistSelect = (artist: Community) => {
     // Close popover immediately to avoid flicker
     setIsOpen(false);
 
@@ -151,7 +126,7 @@ export default function ArtistDropdown() {
             className="text-[18px] sm:text-[20px] md:text-[24px] font-bold leading-tight md:leading-[28px] text-[#212529] transition-colors group-hover:opacity-80"
             style={{ fontFamily: "Phudu" }}
           >
-            {currentArtist.name}
+            {currentArtist?.communityName}
           </h1>
           <div className="transition-transform group-hover:scale-110">
             <Image
@@ -175,7 +150,7 @@ export default function ArtistDropdown() {
           </h3>
 
           <div className="space-y-2 max-h-80 overflow-y-auto">
-            {artists.map((artist) => (
+            {artists?.content?.map((artist) => (
               <button
                 key={artist.id}
                 onClick={() => handleArtistSelect(artist)}
@@ -187,32 +162,32 @@ export default function ArtistDropdown() {
               >
                 <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
                   <AvatarImage
-                    src={artist.avatar}
-                    alt={artist.name}
+                    src={artist.imageUrl ?? ""}
+                    alt={artist.communityName ?? ""}
                     className="object-cover"
                   />
                   <AvatarFallback className="bg-gray-200">
-                    {artist.name.charAt(0)}
+                    {artist.communityName?.charAt(0) ?? ""}
                   </AvatarFallback>
                 </Avatar>
 
                 <div className="flex-1 text-left">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-[#212529] text-sm">
-                      {artist.name}
+                      {artist.communityName ?? ""}
                     </span>
-                    {artist.isVerified && (
+                    {/* {artist.isVerified && (
                       <Image
                         src="/icons/tick.svg"
                         alt="Verified"
                         width={16}
                         height={16}
                       />
-                    )}
+                    )} */}
                   </div>
-                  <span className="text-xs text-[#868E96]">
+                  {/* <span className="text-xs text-[#868E96]">
                     {artist.followerCount} người theo dõi
-                  </span>
+                  </span> */}
                 </div>
 
                 {currentArtist.id === artist.id && (

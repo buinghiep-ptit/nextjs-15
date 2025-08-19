@@ -5,8 +5,8 @@ export interface Community {
   communityName?: string;
 }
 
-export interface CommunityResponse {
-  content?: Community[];
+export interface CommonResponse<T> {
+  content?: T[];
   totalElements?: number;
   numberOfElements?: number;
   totalPages?: number;

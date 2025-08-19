@@ -26,7 +26,6 @@ const request = async <Response>(
   const body = options?.body ? JSON.stringify(options.body) : undefined;
   const baseHeaders = {
     "Content-Type": "application/json",
-    deviceId: "451796cc-9e5f-4424-8bf8-c1e6040b6d47",
   };
 
   const baseUrl =

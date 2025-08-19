@@ -22,3 +22,22 @@ export const getMe = async () => {
   const response = await axiosInstance.get(`${AUTH_URL}/profile`);
   return response.data;
 };
+
+// Get OAuth URL
+export async function getOauthURL() {
+  const response = await axiosInstance.get("/auth/api/oauth2/url");
+  return response.data;
+}
+
+export async function validateCode(payload: {
+  code: string;
+  state: string;
+  device_id: string;
+  rememberMe: true;
+}) {
+  const response = await axiosInstance.post(
+    "/auth/api/oauth2/code/verify",
+    payload
+  );
+  return response.data;
+}

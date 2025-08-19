@@ -1,6 +1,6 @@
 import { cacheUtils, httpCached } from "@/lib/http";
 import { BannerResponse } from "@/types/banner.type";
-import { CommunityResponse } from "@/types/community.type";
+import { CommonResponse, Community } from "@/types/community.type";
 
 export const homeApiRequest = {
   getBanners: (page: number, size: number) =>
@@ -12,7 +12,7 @@ export const homeApiRequest = {
       }
     ),
   getPublicCommunities: () =>
-    httpCached.get<CommunityResponse>(`/fan/api/public/community`, {
+    httpCached.get<CommonResponse<Community>>(`/fan/api/public/community`, {
       tags: [cacheUtils.tags.communities],
       revalidate: 300, // 5 minutes
     }),

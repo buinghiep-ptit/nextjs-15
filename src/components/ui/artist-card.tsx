@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { cn, getImageWithFallback } from "@/lib/utils";
+import Link from "next/link";
 
 interface ArtistCardProps {
   artistName: string;
@@ -8,6 +9,7 @@ interface ArtistCardProps {
   isActive?: boolean;
   variant?: "slider" | "grid";
   onClick?: () => void;
+  slugName?: string;
 }
 
 export function ArtistCard({
@@ -16,6 +18,7 @@ export function ArtistCard({
   avatarSrc,
   isActive = false,
   variant = "grid",
+  slugName,
 }: ArtistCardProps) {
   const gradientBackground =
     "linear-gradient(316deg, #FF2FC1 -11.37%, #744DF1 63.98%, #005 113.46%)";
@@ -42,16 +45,18 @@ export function ArtistCard({
         )}
       >
         {/* Main Cover Image */}
-        <div className="relative w-full aspect-[11/7] overflow-hidden">
-          <Image
-            src={getImageWithFallback(coverImageSrc, "cover")}
-            alt={`Cover image for ${artistName}`}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            style={{ objectFit: "cover" }}
-            className="transition-transform duration-300 group-hover:scale-105"
-          />
-        </div>
+        <Link href={`/artistpedia/${slugName}`}>
+          <div className="relative w-full aspect-[11/7] overflow-hidden">
+            <Image
+              src={getImageWithFallback(coverImageSrc, "cover")}
+              alt={`Cover image for ${artistName}`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{ objectFit: "cover" }}
+              className="transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+        </Link>
 
         {/* Artist Name and Avatar */}
         <div
@@ -62,7 +67,7 @@ export function ArtistCard({
         >
           <div
             className={cn(
-              "absolute left-1/2 -translate-x-1/2 z-10 -top-6",
+              "absolute left-1/2 -translate-x-1/2 z-1 -top-6",
               isSlider ? "" : "md:-top-8"
             )}
           >

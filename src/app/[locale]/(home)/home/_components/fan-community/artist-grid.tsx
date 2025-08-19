@@ -8,6 +8,7 @@ import { H1 } from "@/components/ui/typography";
 import { Container } from "@/components/ui/container";
 import { useState } from "react";
 import { Community } from "@/types/community.type";
+import { slugify } from "@/lib/utils";
 
 export default function ArtistGrid({
   communities,
@@ -59,6 +60,7 @@ export default function ArtistGrid({
                 avatarSrc={artist.imageUrl || ""}
                 variant="grid"
                 isActive={activeArtist === artist.id}
+                slugName={slugify(artist.communityName || "", artist.id || "")}
               />
             </button>
           ))}
